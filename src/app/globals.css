@@ -8,8 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-open-sans: var(--font-open-sans);
   --color-primary: #C1FD35;
   --color-secondary: #201F22;
 }
@@ -24,5 +23,62 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply font-open-sans;
+}
+
+button {
+  @apply rounded-md;
+  @apply font-bold;
+}
+
+button:hover {
+  @apply cursor-pointer;
+}
+
+.button-small {
+  @apply px-6;
+  @apply py-2;
+  @apply text-[14px];
+}
+
+.button-medium {
+  @apply px-8;
+  @apply py-4;
+  @apply text-[16px];
+}
+
+.button-large {
+  @apply px-12;
+  @apply py-6;
+  @apply text-[18px];
+}
+
+.button-primary {
+  @apply bg-primary;
+  @apply text-secondary;
+}
+
+.button-primary:hover {
+  @apply bg-[#d5ff72];
+}
+
+.button-primary:active {
+  @apply bg-primary;
+  @apply outline-none;
+}
+
+.button-secondary {
+  @apply bg-secondary;
+  @apply text-primary;
+  @apply border-1;
+  @apply border-primary;
+}
+
+.button-secondary:hover {
+  @apply bg-[#3A393E];
+}
+
+.button-secondary:active {
+  @apply bg-secondary;
+  @apply outline-none;
 }
