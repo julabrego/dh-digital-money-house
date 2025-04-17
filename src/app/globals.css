@@ -75,3 +75,27 @@ button:hover {
   @apply bg-secondary;
   @apply outline-none;
 }
+
+.HeroText {
+  @apply mt-16;
+  @apply flex;
+  @apply flex-col;
+  @apply w-[260px];
+  @apply md:w-[460px];
+  @apply gap-4;
+}
+
+.HeroText h1 {
+  @apply font-semibold;
+  @apply md:font-normal;
+  @apply leading-[50px];
+  @apply text-white;
+  @apply text-[27px];
+  @apply md:text-[50px];
+}
+
+.HeroText h2 {
+  @apply text-primary;
+  @apply text-[21.5px];
+  @apply md:text-[30px]
+}
