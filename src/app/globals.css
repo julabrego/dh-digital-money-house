@@ -76,7 +76,23 @@ button:hover {
   @apply outline-none;
 }
 
-.HeroText {
+.home-background-image {
+  @apply relative;
+  @apply min-h-screen;
+  @apply w-full;
+  @apply mt-16;
+  @apply mb-16;
+  @apply h-screen;
+  @apply w-full;
+  @apply bg-cover;
+  @apply bg-center;
+  @apply bg-no-repeat;
+  @apply absolute;
+  @apply bg-[url('/images/background-landing-mb.jpg')];
+  @apply md:bg-[url('/images/background-landing.jpg')];
+}
+
+.hero-text {
   @apply mt-16;
   @apply flex;
   @apply flex-col;
@@ -85,16 +101,17 @@ button:hover {
   @apply gap-4;
 }
 
-.HeroText h1 {
+.hero-text h1 {
   @apply font-semibold;
   @apply md:font-normal;
-  @apply leading-[50px];
+  @apply leading-[32px];
+  @apply md:leading-[50px];
   @apply text-white;
   @apply text-[27px];
   @apply md:text-[50px];
 }
 
-.HeroText h2 {
+.hero-text h2 {
   @apply text-primary;
   @apply text-[21.5px];
   @apply md:text-[30px]
