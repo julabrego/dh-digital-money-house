@@ -14,7 +14,7 @@ type ButtonProps = React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > & {
-  mode?: "primary" | "secondary";
+  mode?: "primary" | "secondary" | "tertiary";
   size?: "small" | "medium" | "large";
 };
 

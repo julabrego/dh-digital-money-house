@@ -2,7 +2,7 @@
 
 :root {
   --background: #201F22;
-  --foreground: #171717;
+  --foreground: #FFFFFF;
 }
 
 @theme inline {
@@ -11,6 +11,8 @@
   --font-open-sans: var(--font-open-sans);
   --color-primary: #C1FD35;
   --color-secondary: #3A393E;
+  --color-tertiary: #CECECE;
+  --color-error: #DA0000;
 }
 
 body {
@@ -76,6 +78,28 @@ button:hover {
   @apply outline-none;
 }
 
+.button-tertiary {
+  @apply bg-tertiary;
+  @apply text-background;
+}
+
+.button-tertiary:hover {
+  @apply bg-[#E5E5E5];
+}
+
+.button-tertiary:active {
+  @apply bg-[#C1C1C1];
+  @apply outline-none;
+}
+
+input {
+  @apply bg-white;
+  @apply text-black;
+  @apply rounded-md;
+  @apply p-4;
+  @apply text-[16px];
+}
+
 .background-image {
   @apply fixed;
   @apply w-full;
@@ -86,4 +110,24 @@ button:hover {
   @apply bg-center;
   @apply bg-no-repeat;
   @apply bg-top;
+}
+
+.form-container {
+  @apply w-full;
+  @apply max-w-[300px];
+  @apply flex;
+  @apply flex-col;
+  @apply justify-center;
+  @apply items-center;
+  @apply gap-6;
+}
+
+.form-container > * {
+  @apply w-full;
+}
+
+.error-message {
+  @apply text-[15px];
+  @apply text-error;
+  @apply italic;
 }
