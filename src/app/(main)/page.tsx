@@ -29,8 +29,8 @@ const HomePage = () => {
 
 const CardsContainer = ({ cards }: { cards: CardType[] }) => {
   return (
-    <article className="translate-y-[100px] cards-container bg-primary px-4 rounded-t-[20px]">
-      <div className="translate-y-[-64px] flex flex-col">
+    <article className="translate-y-[100px] lg:translate-y-[150px] cards-container bg-primary px-4 rounded-t-[20px]">
+      <div className="translate-y-[-64px] lg:translate-y-[-120px] flex flex-col lg:flex-row justify-center items-center gap-[16px]">
         {cards.map((card: CardType, i) => (
           <Card
             key={`card-${card.title}-${i}`}
@@ -45,7 +45,7 @@ const CardsContainer = ({ cards }: { cards: CardType[] }) => {
 
 const Card = ({ title, text }: CardType) => {
   return (
-    <article className="bg-white flex flex-col p-4 md:p-5 rounded-[20px] mb-[16px]">
+    <article className="bg-white flex flex-col p-4 md:p-5 rounded-[20px] max-w-[597px] lg:h-[246px]">
       <h1>{title}</h1>
       <p>{text}</p>
     </article>
