@@ -1,16 +1,58 @@
 import React from "react";
 
+const cards = [
+  {
+    title: "Tranferí dinero",
+    text: "Desde Digital Money House vas a poder transferir dinero a otras cuentas, asi como tambien recibir transferencias y nuclear tu capital en nuestra billetera virtual.",
+  },
+  {
+    title: "Pago de servicios",
+    text: "Pagá mensualmente los servicios en 3 simples clicks. Facil, rápido y conveniente. Olvidate de las facturas en papel.",
+  },
+];
+
 const HomePage = () => {
   return (
-    <div className="home-background-image">
-      <HeroText
-        title="De ahora en adelante hacés más con tu dinero"
-        subtitle="Tu nueva"
-        strongSubtitle="billetera virtual"
-      />
-    </div>
+    <main className="h-screen">
+      <div className="home-background-image" />
+      <section className="absolute top-0 left-0 w-full h-[calc(100%-128px)] flex flex-col justify-between">
+        <HeroText
+          title="De ahora en adelante hacés más con tu dinero"
+          subtitle="Tu nueva"
+          strongSubtitle="billetera virtual"
+        />
+        <CardsContainer cards={cards} />
+      </section>
+    </main>
   );
 };
+
+const CardsContainer = ({ cards }: { cards: CardType[] }) => {
+  return (
+    <article className="translate-y-[100px] cards-container bg-primary px-4 rounded-t-[20px]">
+      <div className="translate-y-[-64px] flex flex-col">
+        {cards.map((card: CardType, i) => (
+          <Card
+            key={`card-${card.title}-${i}`}
+            title={card.title}
+            text={card.text}
+          />
+        ))}
+      </div>
+    </article>
+  );
+};
+
+const Card = ({ title, text }: CardType) => {
+  return (
+    <article className="bg-white flex flex-col p-4 md:p-5 rounded-[20px] mb-[16px]">
+      <h1>{title}</h1>
+      <p>{text}</p>
+    </article>
+  );
+};
+
+type CardType = { title: string; text: string };
 
 const HeroText: React.FC<HeroTextProps> = ({
   title,
@@ -18,7 +60,7 @@ const HeroText: React.FC<HeroTextProps> = ({
   strongSubtitle,
 }) => {
   return (
-    <div className="hero-text absolute z-10 px-4">
+    <div className="hero-text">
       <h1>{title}</h1>
       <Dash />
       <h2>
@@ -39,7 +81,6 @@ type HeroTextProps = {
   subtitle: string;
   strongSubtitle?: string;
 };
-
 
 const Dash = () => {
   return <div className="w-[25px] h-[4px] bg-primary md:hidden" />;

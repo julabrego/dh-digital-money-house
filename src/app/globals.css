@@ -77,23 +77,23 @@ button:hover {
 }
 
 .home-background-image {
-  @apply relative;
-  @apply min-h-screen;
+  @apply fixed;
   @apply w-full;
-  @apply mt-16;
+  @apply mt-0;
   @apply mb-16;
-  @apply h-screen;
-  @apply w-full;
+  @apply h-full;
   @apply bg-cover;
   @apply bg-center;
   @apply bg-no-repeat;
-  @apply absolute;
   @apply bg-[url('/images/background-landing-mb.jpg')];
   @apply md:bg-[url('/images/background-landing.jpg')];
 }
 
 .hero-text {
-  @apply mt-16;
+  @apply mt-12;
+  @apply md:mt-16;
+  @apply pt-8;
+  @apply px-4;
   @apply flex;
   @apply flex-col;
   @apply w-[260px];
@@ -104,15 +104,33 @@ button:hover {
 .hero-text h1 {
   @apply font-semibold;
   @apply md:font-normal;
-  @apply leading-[32px];
+  @apply leading-[28px];
   @apply md:leading-[50px];
   @apply text-white;
-  @apply text-[27px];
+  @apply text-[24px];
   @apply md:text-[50px];
 }
 
 .hero-text h2 {
   @apply text-primary;
   @apply text-[21.5px];
-  @apply md:text-[30px]
+  @apply md:text-[30px];
+  @apply leading-[28px];
+  @apply md:leading-[50px];
+}
+
+.cards-container h1 {
+  @apply border-b-primary;
+  @apply border-b-2;
+  @apply pt-0;
+  @apply pb-[12px];
+  @apply mb-[12px];
+  @apply text-[24px];
+  @apply font-bold;
+  @apply text-background;
+}
+
+.cards-container p {
+  @apply text-[16px];
+  @apply text-background;
 }
