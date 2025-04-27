@@ -115,6 +115,7 @@ input {
 .form-container {
   @apply w-full;
   @apply max-w-[300px];
+  @apply md:max-w-[360px];
   @apply flex;
   @apply flex-col;
   @apply justify-center;

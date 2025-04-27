@@ -4,9 +4,12 @@ const Button: React.FC<ButtonProps> = ({
   children,
   mode = "primary",
   size = "medium",
+  onClick,
 }) => {
   return (
-    <button className={`button-${mode} button-${size}`}>{children}</button>
+    <button className={`button-${mode} button-${size}`} onClick={onClick}>
+      {children}
+    </button>
   );
 };
 
