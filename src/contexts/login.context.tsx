@@ -7,7 +7,7 @@ type LoginContext = {
   error?: string;
 };
 
-const LoginContext = createContext<LoginContextSarasa | undefined>(undefined);
+const LoginContext = createContext<LoginContextType | undefined>(undefined);
 
 const LoginContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [loginContextState, setLoginContextState] = useState<LoginContext>({
@@ -23,7 +23,7 @@ const LoginContextProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-type LoginContextSarasa = LoginContext & {setLoginContextState: Dispatch<SetStateAction<LoginContext>>}
+type LoginContextType = LoginContext & {setLoginContextState: Dispatch<SetStateAction<LoginContext>>}
 
 const useLoginContext = () => {
   const context = useContext(LoginContext);

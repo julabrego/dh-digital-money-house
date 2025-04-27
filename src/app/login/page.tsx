@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/common/Button";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import PATHS from "@/config/routing/paths";
 import {
   LoginContextProvider,
@@ -8,8 +9,10 @@ import {
 } from "@/contexts/login.context";
 
 import LoginSchema from "@/schemas/login.schema";
+import authAPI from "@/services/auth/auth.api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 const LoginPage = () => {
@@ -21,16 +24,25 @@ const LoginPage = () => {
 };
 
 const LoginForm = () => {
-  const { step } = useLoginContext();
+  const { step, setLoginContextState } = useLoginContext();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setLoginContextState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   return (
     <main className="w-full flex justify-center">
       {(() => {
         switch (step) {
           case 0:
-            return <StepOne />;
+            return <StepOne onChange={handleChange} />;
           case 1:
-            return <StepTwo />;
+            return <StepTwo onChange={handleChange} />;
           default:
             return null;
         }
@@ -39,9 +51,13 @@ const LoginForm = () => {
   );
 };
 
-const StepOne = () => {
-  const { setLoginContextState } = useLoginContext();
-  // TODO serverError
+const StepOne = ({
+  onChange,
+}: {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
+  const { email, setLoginContextState } = useLoginContext();
+
   const router = useRouter();
   const methods = useForm<{ email: string }>({
     resolver: yupResolver(LoginSchema.email),
@@ -50,19 +66,20 @@ const StepOne = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = methods;
 
-  const onSubmit = (data: { email: string }) => {
-    try {
-      // Validar contra la api que el mail exista
-    } catch (error) {
-      // y si no existe mostrar error
-    }
+  const onSubmit = () => {
     setLoginContextState((prevState) => ({
       ...prevState,
-      email: data.email,
       step: 1,
     }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setValue("email", value);
+    onChange(e);
   };
 
   const errorMessages = Object.values(errors);
@@ -73,30 +90,39 @@ const StepOne = () => {
         <h1 className="text-[20px] text-center">¡Hola! Ingresá tu e-mail</h1>
         <input
           {...register("email")}
-          type="email"
+          type="text"
           placeholder="Correo electrónico"
+          value={email || ""}
+          onChange={handleChange}
         />
         <Button mode="primary" type="submit">
           Continuar
         </Button>
-        <Button mode="tertiary" onClick={() => router.push(PATHS.REGISTER)}>
+        <Button mode="tertiary" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault()
+          router.push(PATHS.REGISTER)}
+          }>
           Crear cuenta
         </Button>
         {errorMessages.length > 0 &&
           errorMessages.map((error, i) => (
-            <p key={`error-message-${i}`} className="error-message text-center">
+            <ErrorMessage key={`error-message-${i}`}>
               {error.message}
-            </p>
+            </ErrorMessage>
           ))}
       </form>
     </FormProvider>
   );
 };
 
-const StepTwo = () => {
+const StepTwo = ({
+  onChange,
+}: {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
+  const { email, password } = useLoginContext();
   const router = useRouter();
-  const { setLoginContextState } = useLoginContext();
-  // TODO serverError
+  const [serverError, setServerError] = useState<string | null>(null);
   const methods = useForm<{ password: string }>({
     resolver: yupResolver(LoginSchema.password),
   });
@@ -104,19 +130,31 @@ const StepTwo = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = methods;
 
-  const onSubmit = (data: { password: string }) => {
+  const onSubmit = async () => {
+    setServerError(null);
     try {
-      // Validar contra la api que la contraseña sea válida
+      if (email && password) {
+        await authAPI.login(email, password);
+
+        router.push("/");
+        router.refresh();
+      }
     } catch (error) {
-      // y si no existe mostrar error
+      if (error instanceof Error) {
+        setServerError(error.message);
+      } else {
+        setServerError("Ocurrió un error inesperado");
+      }
     }
-    setLoginContextState((prevState) => ({
-      ...prevState,
-      email: data.password,
-      step: 2,
-    }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setValue("password", value);
+    onChange(e);
   };
 
   const errorMessages = Object.values(errors);
@@ -129,16 +167,22 @@ const StepTwo = () => {
           {...register("password")}
           type="password"
           placeholder="Contraseña"
+          value={password || ""}
+          onChange={handleChange}
         />
         <Button mode="primary" type="submit">
           Continuar
         </Button>
-        {errorMessages.length > 0 &&
+        {serverError ? (
+          <ErrorMessage>{serverError}</ErrorMessage>
+        ) : (
+          errorMessages.length > 0 &&
           errorMessages.map((error, i) => (
-            <p key={`error-message-${i}`} className="error-message text-center">
+            <ErrorMessage key={`error-message-${i}`}>
               {error.message}
-            </p>
-          ))}
+            </ErrorMessage>
+          ))
+        )}
       </form>
     </FormProvider>
   );
