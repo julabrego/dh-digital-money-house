@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -18,7 +19,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  @apply font-open-sans;
+  @apply font-[Open_Sans];
 }
 
 button {
@@ -128,7 +129,6 @@ input[disabled] {
 .form-container {
   @apply w-full;
   @apply max-w-[300px];
-  @apply md:max-w-[360px];
   @apply flex;
   @apply flex-col;
   @apply justify-center;
@@ -136,8 +136,21 @@ input[disabled] {
   @apply gap-6;
 }
 
-.form-container > * {
+.form-container .fields-container {
   @apply w-full;
+  @apply flex;
+  @apply flex-col;
+  @apply gap-x-[30px];
+  @apply gap-y-[36px];
+}
+
+.form-container .fields-container.register-form {
+  @apply md:grid;
+  @apply md:grid-cols-2;
+}
+
+.form-container .fields-container .full-width-row {
+  @apply col-span-2;
 }
 
 .error-message {

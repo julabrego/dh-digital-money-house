@@ -5,10 +5,11 @@ const Button: React.FC<ButtonProps> = ({
   mode = "primary",
   size = "medium",
   onClick,
+  className,
   ...rest
 }) => {
   return (
-    <button className={`button-${mode} button-${size}`} onClick={onClick} {...rest}>
+    <button className={`button-${mode} button-${size} ${className}`} onClick={onClick} {...rest}>
       {children}
     </button>
   );

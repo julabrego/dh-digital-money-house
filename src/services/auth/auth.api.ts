@@ -17,7 +17,7 @@ class AuthAPI {
     password,
     phone,
   }: RegisterUserParamsType): Promise<RegisterUserResponseType> =>
-    httpInternalAPI.httpPostPublic(`/register`, {
+    httpInternalAPI.httpPostPublic(`/users`, {
       dni,
       email,
       firstname,

@@ -2,6 +2,7 @@
 
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import MainContainer from "@/components/common/MainContainer";
 import TextInput from "@/components/common/TextInput";
 import PATHS from "@/config/routing/paths";
 import {
@@ -28,7 +29,7 @@ const LoginForm = () => {
   const { step } = useLoginContext();
 
   return (
-    <main className="w-full flex justify-center">
+    <MainContainer>
       {(() => {
         switch (step) {
           case 0:
@@ -39,7 +40,7 @@ const LoginForm = () => {
             return null;
         }
       })()}
-    </main>
+    </MainContainer>
   );
 };
 
@@ -70,31 +71,36 @@ const StepOne = () => {
 
   return (
     <FormProvider {...methods}>
-      <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="form-container md:max-w-[360px];"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1 className="text-[20px] text-center">¡Hola! Ingresá tu e-mail</h1>
 
-        <TextInput name="email" placeholder="Correo electrónico" />
+        <div className="fields-container">
+          <TextInput name="email" placeholder="Correo electrónico" />
 
-        <Button mode="primary" type="submit">
-          Continuar
-        </Button>
+          <Button mode="primary" type="submit">
+            Continuar
+          </Button>
 
-        <Button
-          mode="tertiary"
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            router.push(PATHS.REGISTER);
-          }}
-        >
-          Crear cuenta
-        </Button>
+          <Button
+            mode="tertiary"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              router.push(PATHS.REGISTER);
+            }}
+          >
+            Crear cuenta
+          </Button>
 
-        {errorMessages.length > 0 &&
-          errorMessages.map((error, i) => (
-            <ErrorMessage key={`error-message-${i}`}>
-              {error.message}
-            </ErrorMessage>
-          ))}
+          {errorMessages.length > 0 &&
+            errorMessages.map((error, i) => (
+              <ErrorMessage key={`error-message-${i}`}>
+                {error.message}
+              </ErrorMessage>
+            ))}
+        </div>
       </form>
     </FormProvider>
   );
@@ -104,10 +110,10 @@ const StepTwo = () => {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   const { email } = useLoginContext();
   const methods = useForm<{ email: string; password: string }>({
-    resolver: yupResolver(LoginSchema.stepTwo),
+    resolver: yupResolver(LoginSchema.password),
   });
 
   const {
@@ -125,8 +131,9 @@ const StepTwo = () => {
     const { email, password } = getValues();
 
     setServerError(null);
+
     try {
-      if (email) {
+      if (email && password) {
         setIsLoading(true);
         await authAPI.login(email, password);
 
@@ -151,7 +158,12 @@ const StepTwo = () => {
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-[20px] text-center">Ingresá tu contraseña</h1>
 
-        <TextInput name="password" placeholder="Contraseña" type="password" disabled={isLoading} />
+        <TextInput
+          name="password"
+          placeholder="Contraseña"
+          type="password"
+          disabled={isLoading}
+        />
 
         <Button mode="primary" type="submit" disabled={isLoading}>
           {isLoading ? "Enviando..." : "Continuar"}
