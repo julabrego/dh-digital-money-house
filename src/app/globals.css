@@ -26,6 +26,13 @@ button {
   @apply font-bold;
 }
 
+button[disabled] {
+  @apply pointer-events-none;
+  @apply cursor-none;
+  @apply bg-[#999999];
+  @apply text-[#3A393E];
+}
+
 button:hover {
   @apply cursor-pointer;
 }
@@ -98,6 +105,12 @@ input {
   @apply rounded-md;
   @apply p-4;
   @apply text-[16px];
+}
+
+input[disabled] {
+  @apply pointer-events-none;
+  @apply cursor-none;
+  @apply text-[#999999];
 }
 
 .background-image {

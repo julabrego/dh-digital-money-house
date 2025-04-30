@@ -2,6 +2,7 @@
 
 import Button from "@/components/common/Button";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import TextInput from "@/components/common/TextInput";
 import PATHS from "@/config/routing/paths";
 import {
   LoginContextProvider,
@@ -12,7 +13,7 @@ import LoginSchema from "@/schemas/login.schema";
 import authAPI from "@/services/auth/auth.api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 const LoginPage = () => {
@@ -24,25 +25,16 @@ const LoginPage = () => {
 };
 
 const LoginForm = () => {
-  const { step, setLoginContextState } = useLoginContext();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setLoginContextState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const { step } = useLoginContext();
 
   return (
     <main className="w-full flex justify-center">
       {(() => {
         switch (step) {
           case 0:
-            return <StepOne onChange={handleChange} />;
+            return <StepOne />;
           case 1:
-            return <StepTwo onChange={handleChange} />;
+            return <StepTwo />;
           default:
             return null;
         }
@@ -51,35 +43,27 @@ const LoginForm = () => {
   );
 };
 
-const StepOne = ({
-  onChange,
-}: {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => {
-  const { email, setLoginContextState } = useLoginContext();
+const StepOne = () => {
+  const { setLoginContextState } = useLoginContext();
 
   const router = useRouter();
+
   const methods = useForm<{ email: string }>({
-    resolver: yupResolver(LoginSchema.email),
+    resolver: yupResolver(LoginSchema.stepOne),
   });
+
   const {
-    register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    getValues,
   } = methods;
 
   const onSubmit = () => {
     setLoginContextState((prevState) => ({
       ...prevState,
+      email: getValues().email,
       step: 1,
     }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setValue("email", value);
-    onChange(e);
   };
 
   const errorMessages = Object.values(errors);
@@ -88,22 +72,23 @@ const StepOne = ({
     <FormProvider {...methods}>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-[20px] text-center">¡Hola! Ingresá tu e-mail</h1>
-        <input
-          {...register("email")}
-          type="text"
-          placeholder="Correo electrónico"
-          value={email || ""}
-          onChange={handleChange}
-        />
+
+        <TextInput name="email" placeholder="Correo electrónico" />
+
         <Button mode="primary" type="submit">
           Continuar
         </Button>
-        <Button mode="tertiary" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          e.preventDefault()
-          router.push(PATHS.REGISTER)}
-          }>
+
+        <Button
+          mode="tertiary"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            router.push(PATHS.REGISTER);
+          }}
+        >
           Crear cuenta
         </Button>
+
         {errorMessages.length > 0 &&
           errorMessages.map((error, i) => (
             <ErrorMessage key={`error-message-${i}`}>
@@ -115,28 +100,34 @@ const StepOne = ({
   );
 };
 
-const StepTwo = ({
-  onChange,
-}: {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => {
-  const { email, password } = useLoginContext();
+const StepTwo = () => {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
-  const methods = useForm<{ password: string }>({
-    resolver: yupResolver(LoginSchema.password),
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  const { email } = useLoginContext();
+  const methods = useForm<{ email: string; password: string }>({
+    resolver: yupResolver(LoginSchema.stepTwo),
   });
+
   const {
-    register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
   } = methods;
 
+  useEffect(() => {
+    setValue("email", email ?? "");
+  }, []);
+
   const onSubmit = async () => {
+    const { email, password } = getValues();
+
     setServerError(null);
     try {
-      if (email && password) {
+      if (email) {
+        setIsLoading(true);
         await authAPI.login(email, password);
 
         router.push("/");
@@ -148,13 +139,9 @@ const StepTwo = ({
       } else {
         setServerError("Ocurrió un error inesperado");
       }
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setValue("password", value);
-    onChange(e);
   };
 
   const errorMessages = Object.values(errors);
@@ -163,16 +150,13 @@ const StepTwo = ({
     <FormProvider {...methods}>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-[20px] text-center">Ingresá tu contraseña</h1>
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="Contraseña"
-          value={password || ""}
-          onChange={handleChange}
-        />
-        <Button mode="primary" type="submit">
-          Continuar
+
+        <TextInput name="password" placeholder="Contraseña" type="password" disabled={isLoading} />
+
+        <Button mode="primary" type="submit" disabled={isLoading}>
+          {isLoading ? "Enviando..." : "Continuar"}
         </Button>
+
         {serverError ? (
           <ErrorMessage>{serverError}</ErrorMessage>
         ) : (

@@ -3,7 +3,6 @@ import { createContext, Dispatch, SetStateAction, useContext, useState } from "r
 type LoginContext = {
   step: number;
   email?: string;
-  password?: string;
   error?: string;
 };
 
