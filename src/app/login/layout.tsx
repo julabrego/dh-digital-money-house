@@ -1,5 +1,4 @@
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
+import GeneralLayout from "@/components/common/Layout";
 import "../globals.css";
 
 export default function MainLayout({
@@ -7,13 +6,5 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className="pt-16 pb-16 flex flex-col min-h-screen justify-center items-center">
-        <Header mode="login" />
-        {children}
-        <Footer />
-      </body>
-    </html>
-  );
+  return <GeneralLayout mode={"login"}>{children}</GeneralLayout>;
 }

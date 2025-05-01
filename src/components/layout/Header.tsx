@@ -17,7 +17,8 @@ const Header = ({ mode = "main" }: HeaderProps) => {
     router.refresh();
   };
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  const token = null;
 
   return (
     <nav
