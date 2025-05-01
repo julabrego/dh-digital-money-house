@@ -1,4 +1,5 @@
-import './globals.css';
+import { GlobalContextProvider } from "@/contexts/global.context";
+import "./globals.css";
 
 export default function MainLayout({
   children,
@@ -8,7 +9,7 @@ export default function MainLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>
   );

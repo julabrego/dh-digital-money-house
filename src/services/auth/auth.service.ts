@@ -1,9 +1,9 @@
 import {
   LoginResponseType,
-  RegisterUserParamsType,
   RegisterUserResponseType,
 } from "@/types/auth.types";
 import authAPI from "./auth.api";
+import { User } from "@/types/user.types";
 
 class AuthService {
   async login(email: string, password: string): Promise<LoginResponseType> {
@@ -21,7 +21,7 @@ class AuthService {
     lastname,
     password,
     phone,
-  }: RegisterUserParamsType): Promise<RegisterUserResponseType> {
+  }: User): Promise<RegisterUserResponseType> {
     return await authAPI.register({
       dni,
       email,

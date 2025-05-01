@@ -5,20 +5,19 @@ import Image from "next/image";
 import Button from "../common/Button";
 import { useRouter } from "next/navigation";
 import PATHS from "@/config/routing/paths";
+import { useGlobalContext } from "@/contexts/global.context";
 
 const { REGISTER, LOGIN } = PATHS;
 
 const Header = ({ mode = "main" }: HeaderProps) => {
   const router = useRouter();
-
+  const { userToken } = useGlobalContext();
+console.log({userToken})
   const onGoToLink = (href: string) => {
     console.log("click", href);
     router.push(href);
     router.refresh();
   };
-
-  // const token = localStorage.getItem("token");
-  const token = null;
 
   return (
     <nav
@@ -38,7 +37,7 @@ const Header = ({ mode = "main" }: HeaderProps) => {
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {!token && mode === "main" && (
+        {!userToken && mode === "main" && (
           <div className="flex gap-4">
             <Button
               onClick={() => onGoToLink(LOGIN)}

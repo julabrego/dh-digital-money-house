@@ -1,9 +1,9 @@
 import {
   LoginResponseType,
-  RegisterUserParamsType,
   RegisterUserResponseType,
 } from "@/types/auth.types";
 import httpInternalAPI from "../common/http.internal.service";
+import { User } from "@/types/user.types";
 
 class AuthAPI {
   login = async (email: string, password: string): Promise<LoginResponseType> =>
@@ -16,7 +16,7 @@ class AuthAPI {
     lastname,
     password,
     phone,
-  }: RegisterUserParamsType): Promise<RegisterUserResponseType> =>
+  }: User): Promise<RegisterUserResponseType> =>
     httpInternalAPI.httpPostPublic(`/users`, {
       dni,
       email,

@@ -1,6 +1,6 @@
 "use client"
 
-import { RegisterUserParamsType } from "@/types/auth.types";
+import { User } from "@/types/auth.types";
 import {
   createContext,
   Dispatch,
@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-type RegisterContext = RegisterUserParamsType
+type RegisterContext = User
 
 const RegisterContext = createContext<RegisterContextType | undefined>(
   undefined

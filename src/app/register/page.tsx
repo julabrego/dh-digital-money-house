@@ -8,7 +8,7 @@ import AccountCreated from "@/components/registerPage/AccountCreated";
 import { RegisterContextProvider } from "@/contexts/register.context";
 import RegisterSchema from "@/schemas/register.schema";
 import authService from "@/services/auth/auth.service";
-import { RegisterUserParamsType } from "@/types/auth.types";
+import { User } from "@/types/user.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -26,7 +26,7 @@ const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAccountCreated, setIsAccountCreated] = useState<boolean>(false);
 
-  const methods = useForm<RegisterUserParamsType & { passwordRepeat: string }>({
+  const methods = useForm<User & { passwordRepeat: string }>({
     resolver: yupResolver(RegisterSchema),
   });
 

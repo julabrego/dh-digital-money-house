@@ -1,6 +1,6 @@
+"use client"
 import CardsContainer from "@/components/mainPage/CardContainer";
 import HeroText from "@/components/mainPage/HeroText";
-import React from "react";
 
 const HomePage = () => {
   const cards = [
