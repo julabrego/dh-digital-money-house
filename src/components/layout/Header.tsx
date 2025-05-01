@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import Image from "next/image";
@@ -12,10 +12,12 @@ const Header = ({ mode = "main" }: HeaderProps) => {
   const router = useRouter();
 
   const onGoToLink = (href: string) => {
-    console.log("click", href)
+    console.log("click", href);
     router.push(href);
     router.refresh();
   };
+
+  const token = localStorage.getItem("token");
 
   return (
     <nav
@@ -35,7 +37,7 @@ const Header = ({ mode = "main" }: HeaderProps) => {
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {mode === "main" && (
+        {!token && mode === "main" && (
           <div className="flex gap-4">
             <Button
               onClick={() => onGoToLink(LOGIN)}

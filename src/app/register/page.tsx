@@ -7,7 +7,7 @@ import TextInput from "@/components/common/TextInput";
 import AccountCreated from "@/components/registerPage/AccountCreated";
 import { RegisterContextProvider } from "@/contexts/register.context";
 import RegisterSchema from "@/schemas/register.schema";
-import authAPI from "@/services/auth/auth.api";
+import authService from "@/services/auth/auth.service";
 import { RegisterUserParamsType } from "@/types/auth.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
@@ -46,7 +46,7 @@ const RegisterForm = () => {
 
       const { firstname, lastname, dni, email, password, phone } = getValues();
 
-      await authAPI.register({
+      await authService.register({
         firstname,
         lastname,
         dni: Number(dni),
@@ -74,7 +74,10 @@ const RegisterForm = () => {
   return (
     <MainContainer>
       <FormProvider {...methods}>
-        <form className="form-container md:min-w-[715px]" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="form-container md:min-w-[715px]"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h1 className="text-[20px] text-center">Crear cuenta</h1>
 
           <div className="fields-container register-form">
@@ -88,54 +91,59 @@ const RegisterForm = () => {
               placeholder="Apellido*"
               disabled={isLoading}
             />
-          <TextInput
-            name="dni"
-            placeholder="DNI*"
-            type="number"
-            min={10000000}
-            disabled={isLoading}
-          />
-          <TextInput
-            name="email"
-            placeholder="Correo electrónico"
-            disabled={isLoading}
-          />
+            <TextInput
+              name="dni"
+              placeholder="DNI*"
+              type="number"
+              min={10000000}
+              disabled={isLoading}
+            />
+            <TextInput
+              name="email"
+              placeholder="Correo electrónico"
+              disabled={isLoading}
+            />
 
-          <p className="full-width-row text-[11px] text-center">
-            Usa entre 6 y 20 carácteres (debe contener al menos al menos 1
-            carácter especial, una mayúscula y un número.
-          </p>
+            <p className="full-width-row text-[11px] text-center">
+              Usa entre 6 y 20 carácteres (debe contener al menos al menos 1
+              carácter especial, una mayúscula y un número.
+            </p>
 
-          <TextInput
-            name="password"
-            placeholder="Contraseña*"
-            type="password"
-            disabled={isLoading}
-          />
-          <TextInput
-            name="passwordRepeat"
-            placeholder="Repite contraseña*"
-            type="password"
-            disabled={isLoading}
-          />
-          <TextInput
-            name="phone"
-            placeholder="Teléfono*"
-            disabled={isLoading}
-          />
+            <TextInput
+              name="password"
+              placeholder="Contraseña*"
+              type="password"
+              disabled={isLoading}
+            />
+            <TextInput
+              name="passwordRepeat"
+              placeholder="Repite contraseña*"
+              type="password"
+              disabled={isLoading}
+            />
+            <TextInput
+              name="phone"
+              placeholder="Teléfono*"
+              disabled={isLoading}
+            />
 
-          <Button mode="primary" type="submit" disabled={isLoading}>
-            Crear cuenta
-          </Button>
-          {serverError ? (
-            <ErrorMessage>{serverError}</ErrorMessage>
-          ) : (
-            errorMessages.length > 0 && (
-              <ErrorMessage>{errorMessages[0].message}</ErrorMessage>
-            )
-          )}
-</div>
+            <Button mode="primary" type="submit" disabled={isLoading}>
+              Crear cuenta
+            </Button>
 
+            {serverError ||
+              (errorMessages.length > 0 && (
+                <div className="full-width-row text-[11px] text-center">
+                  {serverError ? (
+                    <ErrorMessage>{serverError}</ErrorMessage>
+                  ) : (
+                    errorMessages.length > 0 && (
+                      <ErrorMessage>{errorMessages[0].message}</ErrorMessage>
+                    )
+                  )}
+                </div>
+              ))}
+          </div>
         </form>
       </FormProvider>
     </MainContainer>

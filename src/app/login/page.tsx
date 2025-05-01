@@ -11,7 +11,7 @@ import {
 } from "@/contexts/login.context";
 
 import LoginSchema from "@/schemas/login.schema";
-import authAPI from "@/services/auth/auth.api";
+import authService from "@/services/auth/auth.service";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -135,7 +135,7 @@ const StepTwo = () => {
     try {
       if (email && password) {
         setIsLoading(true);
-        await authAPI.login(email, password);
+        await authService.login(email, password);
 
         router.push("/");
         router.refresh();
@@ -156,29 +156,31 @@ const StepTwo = () => {
   return (
     <FormProvider {...methods}>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="text-[20px] text-center">Ingresá tu contraseña</h1>
+        <div className="fields-container">
+          <h1 className="text-[20px] text-center">Ingresá tu contraseña</h1>
 
-        <TextInput
-          name="password"
-          placeholder="Contraseña"
-          type="password"
-          disabled={isLoading}
-        />
+          <TextInput
+            name="password"
+            placeholder="Contraseña"
+            type="password"
+            disabled={isLoading}
+          />
 
-        <Button mode="primary" type="submit" disabled={isLoading}>
-          {isLoading ? "Enviando..." : "Continuar"}
-        </Button>
+          <Button mode="primary" type="submit" disabled={isLoading}>
+            {isLoading ? "Enviando..." : "Continuar"}
+          </Button>
 
-        {serverError ? (
-          <ErrorMessage>{serverError}</ErrorMessage>
-        ) : (
-          errorMessages.length > 0 &&
-          errorMessages.map((error, i) => (
-            <ErrorMessage key={`error-message-${i}`}>
-              {error.message}
-            </ErrorMessage>
-          ))
-        )}
+          {serverError ? (
+            <ErrorMessage>{serverError}</ErrorMessage>
+          ) : (
+            errorMessages.length > 0 &&
+            errorMessages.map((error, i) => (
+              <ErrorMessage key={`error-message-${i}`}>
+                {error.message}
+              </ErrorMessage>
+            ))
+          )}
+        </div>
       </form>
     </FormProvider>
   );

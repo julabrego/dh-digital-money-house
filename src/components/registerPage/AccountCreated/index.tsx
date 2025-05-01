@@ -8,14 +8,14 @@ const AccountCreated = () => {
   const router = useRouter();
   return (
     <div className="flex flex-col items-center gap-4 px-16 py-8">
-      <h1 className="text-[35px] font-semibold text-center">Registro Exitoso</h1>
+      <h1 className="text-[35px] md:text-[64px] font-semibold text-center">Registro Exitoso</h1>
       <Image
         src={"/images/check.png"}
         alt="Registro Exitoso"
         width={94}
         height={97}
       />
-      <p className="text-[14px] text-center">
+      <p className="text-[14px] md:text-[16px] mb-8 text-center">
         Hemos enviado un correo de confirmación para validar tu email, por favor
         revisalo para iniciar sesión.
       </p>
