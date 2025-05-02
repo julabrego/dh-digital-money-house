@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header";
 import React from "react";
 
 type LayoutProps = React.PropsWithChildren & {
-  mode?: "main" | "login";
+  mode?: "main" | "login" | "register";
 };
 
 const GeneralLayout = ({ children, mode }: LayoutProps) => {

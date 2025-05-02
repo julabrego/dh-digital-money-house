@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digital HOuse Money
 
-## Getting Started
+## Introducción
 
-First, run the development server:
+Bienvenido al proyecto Digital Money House. Este proyecto es una aplicación web diseñada para gestionar transacciones financieras de manera segura y eficiente.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tabla de Contenidos
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* [Introducción](#introducción)
+* [Descripción General](#descripción-general)
+* [Instalación](#instalación)
+* [Documento de Pruebas](#documento-de-pruebas)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Descripción General
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Digital Money House es una aplicación web que permite a los usuarios gestionar sus transacciones financieras de manera segura y eficiente. La aplicación cuenta con una variedad de características, incluyendo:
 
-## Learn More
+* Registro y login de usuarios
+* Gestión de medios de pago
+* Recarga de saldos en billetera
+* Gestión de transacciones
 
-To learn more about Next.js, take a look at the following resources:
+## Instalación
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para instalar la aplicación, sigue los siguientes pasos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clona el repositorio en tu máquina local
+2. Instala las dependencias necesarias con `npm install`
+3. Inicia la aplicación con `npm start`
 
-## Deploy on Vercel
+## Documento de Pruebas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+El documento de pruebas detalla los casos de prueba y los resultados esperados para cada característica de la aplicación. Puedes encontrar el documento de pruebas en la carpeta `testing`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* [Documento de Pruebas manuales](https://docs.google.com/spreadsheets/d/1DHKAM8H5Rt1SLiFlK5N76gyTfcwq900r/edit?gid=627511232#gid=627511232)

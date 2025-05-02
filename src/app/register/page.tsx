@@ -5,9 +5,9 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import MainContainer from "@/components/common/MainContainer";
 import TextInput from "@/components/common/TextInput";
 import AccountCreated from "@/components/registerPage/AccountCreated";
+import { useGlobalContext } from "@/contexts/global.context";
 import { RegisterContextProvider } from "@/contexts/register.context";
 import RegisterSchema from "@/schemas/register.schema";
-import authService from "@/services/auth/auth.service";
 import { User } from "@/types/user.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
@@ -22,6 +22,9 @@ const RegisterPage = () => {
 };
 
 const RegisterForm = () => {
+  const {
+    serviceProvider: { authService },
+  } = useGlobalContext();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAccountCreated, setIsAccountCreated] = useState<boolean>(false);
@@ -128,11 +131,11 @@ const RegisterForm = () => {
             />
 
             <Button mode="primary" type="submit" disabled={isLoading}>
-              Crear cuenta
+              {isLoading ? "Enviando..." : "Crear cuenta"}
             </Button>
 
-            {serverError ||
-              (errorMessages.length > 0 && (
+            {(serverError ||
+              errorMessages.length > 0) && (
                 <div className="full-width-row text-[11px] text-center">
                   {serverError ? (
                     <ErrorMessage>{serverError}</ErrorMessage>
@@ -142,7 +145,7 @@ const RegisterForm = () => {
                     )
                   )}
                 </div>
-              ))}
+              )}
           </div>
         </form>
       </FormProvider>

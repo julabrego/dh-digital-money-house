@@ -1,3 +1,5 @@
+// TODO: TESTS -> SPRINT2
+
 "use client";
 
 import React from "react";
@@ -63,7 +65,7 @@ const Header = ({ mode = "main" }: HeaderProps) => {
 };
 
 type HeaderProps = {
-  mode?: "main" | "login";
+  mode?: "main" | "login" | "register";
 };
 
 export default Header;
