@@ -5,7 +5,7 @@ import {
 import authAPI from "./auth.api";
 import { User } from "@/types/user.types";
 
-class AuthService {
+export default class AuthService {
   async login(email: string, password: string): Promise<LoginResponseType> {
     const token = await authAPI.login(email, password);
     if (token) {
@@ -36,7 +36,3 @@ class AuthService {
     await authAPI.logout();
   }
 }
-
-const authService = new AuthService();
-
-export default authService;

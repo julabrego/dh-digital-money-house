@@ -12,7 +12,9 @@ const { REGISTER, LOGIN } = PATHS;
 const Header = ({ mode = "main" }: HeaderProps) => {
   const router = useRouter();
   const { userToken } = useGlobalContext();
-console.log({userToken})
+  
+  console.log({ userToken });
+  
   const onGoToLink = (href: string) => {
     console.log("click", href);
     router.push(href);
@@ -37,7 +39,7 @@ console.log({userToken})
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {!userToken && mode === "main" && (
+        {!userToken && userToken !== "pending" && mode === "main" && (
           <div className="flex gap-4">
             <Button
               onClick={() => onGoToLink(LOGIN)}

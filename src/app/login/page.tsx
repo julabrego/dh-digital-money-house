@@ -5,13 +5,13 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import MainContainer from "@/components/common/MainContainer";
 import TextInput from "@/components/common/TextInput";
 import PATHS from "@/config/routing/paths";
+import { useGlobalContext } from "@/contexts/global.context";
 import {
   LoginContextProvider,
   useLoginContext,
 } from "@/contexts/login.context";
 
 import LoginSchema from "@/schemas/login.schema";
-import authService from "@/services/auth/auth.service";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -108,6 +108,9 @@ const StepOne = () => {
 
 const StepTwo = () => {
   const router = useRouter();
+  const {
+    serviceProvider: { authService }, setUserToken
+  } = useGlobalContext();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -135,7 +138,9 @@ const StepTwo = () => {
     try {
       if (email && password) {
         setIsLoading(true);
-        await authService.login(email, password);
+
+        const token = await authService.login(email, password);
+        setUserToken(token?.token);
 
         router.push("/");
         router.refresh();

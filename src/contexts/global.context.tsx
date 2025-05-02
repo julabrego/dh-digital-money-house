@@ -1,28 +1,45 @@
-"use client"
-import { User } from "@/types/user.types";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from "react";
+"use client";
+import AuthService from "@/services/auth/auth.service";
+import UserService from "@/services/user/user.service";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type GlobalContextValue = {
-  userToken: string | null;
-  userData?: User;
+  userToken?: string;
+  setUserToken: React.Dispatch<React.SetStateAction<string | undefined>>;
+  serviceProvider: ServiceProvider;
+};
+
+type ServiceProvider = {
+  userService: UserService;
+  authService: AuthService;
 };
 
 const GlobalContext = createContext<GlobalContextValue | undefined>(undefined);
 
 const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
-  const [userToken, setUserToken] = useState<string | null>(null);
+  const [userToken, setUserToken] = useState<string | undefined>("pending");
+  const [serviceProvider] = useState<ServiceProvider>({
+    userService: new UserService(),
+    authService: new AuthService(),
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setUserToken(token);
+    if (token) {
+      setUserToken(token);
+    } else {
+      setUserToken(undefined);
+    }
   }, []);
 
-  const value = { userToken };
+  useEffect(() => {
+    if (userToken !== null) {
+      console.log("setting user token");
+      serviceProvider.userService.userToken = userToken;
+    }
+  }, [serviceProvider, userToken]);
+
+  const value = { userToken, setUserToken, serviceProvider };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
@@ -40,4 +57,3 @@ const useGlobalContext = () => {
 };
 
 export { GlobalContextProvider, useGlobalContext };
-
