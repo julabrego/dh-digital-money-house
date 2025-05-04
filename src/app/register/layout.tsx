@@ -6,5 +6,5 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <GeneralLayout mode={"register"}>{children}</GeneralLayout>;
+  return <GeneralLayout mode={"light"}>{children}</GeneralLayout>;
 }

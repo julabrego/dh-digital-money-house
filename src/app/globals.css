@@ -70,6 +70,20 @@ button:hover {
   @apply outline-none;
 }
 
+.light-container .button-primary {
+  @apply bg-background;
+  @apply text-white;
+}
+
+.light-container .button-primary:hover {
+  @apply bg-gray-600;
+}
+
+.light-container .button-primary:active {
+  @apply bg-black;
+  @apply outline-none;
+}
+
 .button-secondary {
   @apply bg-background;
   @apply text-primary;
