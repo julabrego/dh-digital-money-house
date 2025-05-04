@@ -7,6 +7,8 @@ type GlobalContextValue = {
   userToken?: string;
   setUserToken: React.Dispatch<React.SetStateAction<string | undefined>>;
   serviceProvider: ServiceProvider;
+  toggleMenuOpen: () => void;
+  isMenuOpen: boolean;
 };
 
 type ServiceProvider = {
@@ -17,11 +19,13 @@ type ServiceProvider = {
 const GlobalContext = createContext<GlobalContextValue | undefined>(undefined);
 
 const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
-  const [userToken, setUserToken] = useState<string | undefined>("pending");
   const [serviceProvider] = useState<ServiceProvider>({
     userService: new UserService(),
     authService: new AuthService(),
   });
+  const [userToken, setUserToken] = useState<string | undefined>("pending");
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -39,7 +43,11 @@ const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
     }
   }, [serviceProvider, userToken]);
 
-  const value = { userToken, setUserToken, serviceProvider };
+  const toggleMenuOpen = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const value = { userToken, setUserToken, serviceProvider, toggleMenuOpen, isMenuOpen };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

@@ -1,31 +1,21 @@
-// TODO: TESTS -> SPRINT2
-
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import Button from "../common/Button";
-import { useRouter, usePathname } from "next/navigation";
 import PATHS from "@/config/routing/paths";
 import { useGlobalContext } from "@/contexts/global.context";
+import useNavigation from "@/hooks/useNavigation";
+import Image from "next/image";
+import Button from "../common/Button";
 import { GeneralLayoutMode } from "../common/Layout/types";
 
 const { REGISTER, LOGIN, MAIN } = PATHS;
 
 const Header = ({ mode = "dark" }: HeaderProps) => {
-  const router = useRouter();
-  const pathName = usePathname();
-  const { userToken } = useGlobalContext();
-
-  const onGoToLink = (href: string) => {
-    console.log("click", href);
-    router.push(href);
-    router.refresh();
-  };
+  const { onGoToLink, pathName } = useNavigation();
+  const { userToken, toggleMenuOpen } = useGlobalContext();
 
   return (
     <nav
-      className={`fixed top-0 h-16 w-full ${
+      className={`fixed top-0 h-16 w-full overflow-x-hidden max-w-[100vw] ${
         mode === "dark"
           ? "bg-background dark-container"
           : "bg-primary light-container"
@@ -43,8 +33,22 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {!userToken && userToken !== "pending" && (
-          <div className="flex gap-4">
+        {isUserAuthenticated() ? (
+          <div className="flex gap-[12px] items-center">
+            <div className="h-[33px] w-[39px] flex justify-center items-center rounded bg-primary text-background font-bold">
+              MB
+            </div>
+            <Image
+              onClick={toggleMenuOpen}
+              src={"/images/menu.png"}
+              alt="Menu"
+              width={33}
+              height={33}
+              className="h-[33px] w-[33px]"
+            />
+          </div>
+        ) : (
+          <div className="flex gap-[12px]">
             {isPathMain() && (
               <>
                 <Button
@@ -78,6 +82,10 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
       </div>
     </nav>
   );
+
+  function isUserAuthenticated() {
+    return !userToken && userToken !== "pending";
+  }
 
   function isPathMain() {
     return pathName === MAIN;
