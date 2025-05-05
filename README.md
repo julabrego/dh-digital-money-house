@@ -1,4 +1,4 @@
-# Digital HOuse Money
+# Digital House Money
 
 ## Introducción
 
