@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #201F22;
-  --foreground: #FFFFFF;
+  --background: #201f22;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-open-sans: var(--font-open-sans);
-  --color-primary: #C1FD35;
-  --color-secondary: #3A393E;
-  --color-tertiary: #CECECE;
-  --color-error: #DA0000;
+  --color-primary: #c1fd35;
+  --color-secondary: #3a393e;
+  --color-tertiary: #cecece;
+  --color-error: #da0000;
 }
 
 body {
@@ -171,4 +171,14 @@ input[disabled] {
   @apply text-[15px];
   @apply text-error;
   @apply italic;
+}
+
+.main-panel section {
+  @apply w-full;
+}
+
+.main-panel section button,
+.main-panel section input {
+  @apply shadow-md;
+  @apply w-full;
 }
