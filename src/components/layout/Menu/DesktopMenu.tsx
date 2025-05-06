@@ -3,7 +3,7 @@ import { MENU_ITEMS } from "./types";
 
 const DesktopMenu = () => {
   return (
-    <div className="sm:hidden md:block relative left-0 top-0 w-full h-screen">
+    <div className="hidden md:block relative left-0 top-0 w-full h-screen">
       <aside className={`absolute left-0 w-full h-screen bg-primary text-background`}>
         <nav className="p-[32px] sticky top-[64px]">
           <ul>

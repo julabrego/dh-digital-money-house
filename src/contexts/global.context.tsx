@@ -1,4 +1,5 @@
 "use client";
+
 import AuthService from "@/services/auth/auth.service";
 import UserService from "@/services/user/user.service";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -9,6 +10,7 @@ type GlobalContextValue = {
   serviceProvider: ServiceProvider;
   toggleMenuOpen: () => void;
   isMenuOpen: boolean;
+  isUserAuthenticated: boolean;
 };
 
 type ServiceProvider = {
@@ -38,7 +40,6 @@ const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     if (userToken !== null) {
-      console.log("setting user token");
       serviceProvider.userService.userToken = userToken;
     }
   }, [serviceProvider, userToken]);
@@ -47,7 +48,9 @@ const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const value = { userToken, setUserToken, serviceProvider, toggleMenuOpen, isMenuOpen };
+  const isUserAuthenticated = userToken !== undefined && userToken !== "pending";
+
+  const value = { userToken, setUserToken, isUserAuthenticated, serviceProvider, toggleMenuOpen, isMenuOpen };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

@@ -11,7 +11,7 @@ const { REGISTER, LOGIN, MAIN } = PATHS;
 
 const Header = ({ mode = "dark" }: HeaderProps) => {
   const { onGoToLink, pathName } = useNavigation();
-  const { userToken, toggleMenuOpen } = useGlobalContext();
+  const { isUserAuthenticated, toggleMenuOpen } = useGlobalContext();
 
   return (
     <nav
@@ -33,7 +33,7 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {isUserAuthenticated() ? (
+        {isUserAuthenticated ? (
           <div className="flex gap-[12px] items-center">
             <div className="h-[33px] w-[39px] flex justify-center items-center rounded bg-primary text-background font-bold">
               MB
@@ -44,7 +44,7 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
               alt="Menu"
               width={33}
               height={33}
-              className="h-[33px] w-[33px]"
+              className="h-[33px] w-[33px] md:hidden"
             />
           </div>
         ) : (
@@ -82,10 +82,6 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
       </div>
     </nav>
   );
-
-  function isUserAuthenticated() {
-    return !userToken && userToken !== "pending";
-  }
 
   function isPathMain() {
     return pathName === MAIN;
