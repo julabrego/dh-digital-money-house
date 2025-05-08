@@ -109,7 +109,7 @@ const StepOne = () => {
 const StepTwo = () => {
   const router = useRouter();
   const {
-    serviceProvider: { authService }, setUserToken
+    serviceProvider: { authService }, setUserToken, setUserData
   } = useGlobalContext();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -139,8 +139,11 @@ const StepTwo = () => {
       if (email && password) {
         setIsLoading(true);
 
-        const token = await authService.login(email, password);
-        setUserToken(token?.token);
+        const loginResponse = await authService.login(email, password);
+        setUserToken(loginResponse?.token);
+
+        const userData = await authService.getAccountInfo(loginResponse?.token);
+        setUserData(userData)
 
         router.push("/");
         router.refresh();

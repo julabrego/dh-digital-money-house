@@ -1,7 +1,7 @@
 import HttpBaseAPI from "./http.service";
 
-export const API_URL = "https://digitalmoney.digitalhouse.com";
-export const API_PUBLIC_ENDPOINT = `/api`;
+export const API_URL = "https://digitalmoney.digitalhouse.com/api";
+export const API_PUBLIC_ENDPOINT = ``;
 
 class HttpInternalAPI extends HttpBaseAPI {
   constructor() {

@@ -2,11 +2,14 @@
 
 import AuthService from "@/services/auth/auth.service";
 import UserService from "@/services/user/user.service";
+import { User } from "@/types/user.types";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type GlobalContextValue = {
   userToken?: string;
   setUserToken: React.Dispatch<React.SetStateAction<string | undefined>>;
+  userData?: User;
+  setUserData: React.Dispatch<React.SetStateAction<User| undefined>>;
   serviceProvider: ServiceProvider;
   toggleMenuOpen: () => void;
   isMenuOpen: boolean;
@@ -26,6 +29,7 @@ const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
     authService: new AuthService(),
   });
   const [userToken, setUserToken] = useState<string | undefined>("pending");
+  const [userData, setUserData] = useState<User | undefined>();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -50,7 +54,7 @@ const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
 
   const isUserAuthenticated = userToken !== undefined && userToken !== "pending";
 
-  const value = { userToken, setUserToken, isUserAuthenticated, serviceProvider, toggleMenuOpen, isMenuOpen };
+  const value = { userToken, setUserToken, userData, setUserData, isUserAuthenticated, serviceProvider, toggleMenuOpen, isMenuOpen };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

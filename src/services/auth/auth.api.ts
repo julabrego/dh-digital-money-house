@@ -1,9 +1,10 @@
+import { Account } from "@/types/accout.types";
 import {
   LoginResponseType,
   RegisterUserResponseType,
 } from "@/types/auth.types";
-import httpInternalAPI from "../common/http.internal.service";
 import { User } from "@/types/user.types";
+import httpInternalAPI from "../common/http.internal.service";
 
 class AuthAPI {
   login = async (email: string, password: string): Promise<LoginResponseType> =>
@@ -28,6 +29,9 @@ class AuthAPI {
 
   logout = async (): Promise<LoginResponseType> =>
     httpInternalAPI.httpPostPublic(`/logout`, {});
+
+  getAccountInfo = async (token: string): Promise<Account> =>
+    httpInternalAPI.httpGet(`/account`, undefined, token);
 }
 
 const authAPI = new AuthAPI();

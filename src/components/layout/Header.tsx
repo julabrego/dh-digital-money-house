@@ -11,8 +11,9 @@ const { REGISTER, LOGIN, MAIN } = PATHS;
 
 const Header = ({ mode = "dark" }: HeaderProps) => {
   const { onGoToLink, pathName } = useNavigation();
-  const { isUserAuthenticated, toggleMenuOpen } = useGlobalContext();
+  const { isUserAuthenticated, toggleMenuOpen, userData } = useGlobalContext();
 
+  console.log({userData})
   return (
     <nav
       className={`fixed top-0 h-16 w-full overflow-x-hidden max-w-[100vw] ${

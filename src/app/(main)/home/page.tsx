@@ -5,9 +5,10 @@ import TextInput from "@/components/common/TextInput";
 import Card from "@/components/mainPage/Card/indext";
 import { FormProvider, useForm } from "react-hook-form";
 import Image from "next/image";
+
 const HomePage = () => {
   return (
-    <main className="main-panel w-full flex flex-col gap-[16px] bg-[#eeeaea] p-[16px]">
+    <main className="main-panel w-full h-full flex flex-col gap-[16px] bg-[#eeeaea] p-[16px]">
       <Breadcrumbs title="Inicio" />
 
       <section className="summary bg-[#201F22] text-white p-[16px] rounded-md w-full h-[147px]">
