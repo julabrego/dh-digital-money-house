@@ -1,4 +1,4 @@
-import GeneralLayout from "@/components/common/Layout";
+import GeneralLayout from "@/components/common/GeneralLayout";
 import "../globals.css";
 
 export default function MainLayout({

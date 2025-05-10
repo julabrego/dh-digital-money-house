@@ -1,11 +1,14 @@
+"use client";
+import { useGlobalContext } from "@/contexts/global.context";
 import Image from "next/image";
 import MenuItem from "./MenuItem";
-import { MENU_ITEMS, MenuProps } from "./types";
+import { MENU_ITEMS } from "./types";
 
-const MobileMenu = ({ isOpen, toggleMenuOpen }: MenuProps) => {
+const MobileMenu = () => {
+  const { isMenuOpen, toggleMenuOpen } = useGlobalContext();
   return (
     <div className="md:hidden fixed top-0 w-full h-screen z-30 contents">
-      {isOpen && (
+      {isMenuOpen && (
         <div
           className={`fixed top-0 w-full h-screen z-20 bg-black opacity-50`}
           onClick={toggleMenuOpen}
@@ -13,7 +16,7 @@ const MobileMenu = ({ isOpen, toggleMenuOpen }: MenuProps) => {
       )}
       <aside
         className={`fixed top-0 w-[219px] h-screen z-30 bg-white text-black transition-[right] delay-150 duration-300 ease-in-out text-[16px] ${
-          isOpen ? "right-0" : "right-[-100vw]"
+          isMenuOpen ? "right-0" : "right-[-100vw]"
         }`}
       >
         <header className="h-64px bg-secondary text-primary p-[16px] flex flex-col">

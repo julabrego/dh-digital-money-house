@@ -1,26 +1,33 @@
 "use client";
 
 import { User } from "@/types/user.types";
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from "react";
 
-type GlobalContextValue = {
-  userData?: User;
-  setUserData: React.Dispatch<React.SetStateAction<User | undefined>>;
+type GlobalContextState = {
+  userData: User | null;
   toggleMenuOpen: () => void;
   isMenuOpen: boolean;
 };
 
-const GlobalContext = createContext<GlobalContextValue | undefined>(undefined);
+const GlobalContext = createContext<GlobalContextState | undefined>(undefined);
 
-const GlobalContextProvider = ({ children }: React.PropsWithChildren) => {
-  const [userData, setUserData] = useState<User | undefined>();
+type GlobalContextProps = PropsWithChildren & {
+  userData: User | null;
+};
+
+const GlobalContextProvider = ({ userData, children }: GlobalContextProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenuOpen = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const value = { userData, setUserData, toggleMenuOpen, isMenuOpen };
+  const value = { userData, toggleMenuOpen, isMenuOpen };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

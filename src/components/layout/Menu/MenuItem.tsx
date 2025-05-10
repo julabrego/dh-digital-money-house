@@ -1,8 +1,10 @@
+"use client";
+
 import useNavigation from "@/hooks/useNavigation";
 import { MenuItemProps } from "./types";
 
 const MenuItem = ({ label, path, isSemitransparent }: MenuItemProps) => {
-  const { onGoToLink, pathName } = useNavigation();
+  const { goTo, pathName } = useNavigation();
 
   const isActive = path === pathName;
 
@@ -11,7 +13,7 @@ const MenuItem = ({ label, path, isSemitransparent }: MenuItemProps) => {
       className={`mb-[12px] ${isActive ? "font-bold" : "font-semibold"} ${
         isSemitransparent ? "opacity-50" : ""
       } cursor-pointer`}
-      onClick={() => onGoToLink(path)}
+      onClick={() => goTo(path)}
     >
       {label}
     </li>

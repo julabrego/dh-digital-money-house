@@ -14,6 +14,7 @@ class HttpBaseAPI {
     params?: URLSearchParams,
     accessToken?: string
   ): Promise<T> {
+    console.log(`${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`)
     const res = await fetch(
       `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`,
       {
