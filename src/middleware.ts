@@ -16,7 +16,6 @@ export async function middleware(request: NextRequest) {
 
     const accountInfo = await authAPI.getAccountInfo(sessionId);
 
-    // Redirect if logged in and accessing /login or /register
     if (([PATHS.LOGIN, PATHS.REGISTER] as string[]).includes(pathname)) {
       return NextResponse.redirect(new URL(PATHS.HOME, request.url));
     }
@@ -27,14 +26,17 @@ export async function middleware(request: NextRequest) {
       String(accountInfo.user_id)
     );
   } catch (e) {
+    console.error(e);
+
     await authAPI.logout();
     cookieStore.delete("session-id");
     cookieStore.delete("user-id");
-    // Only redirect to login if not already there or on register
+
     if (!([PATHS.LOGIN, PATHS.REGISTER] as string[]).includes(pathname)) {
       return NextResponse.redirect(new URL(PATHS.LOGIN, request.url));
     }
-    return NextResponse.next(); // Allow login/register access
+
+    return NextResponse.next();
   }
 }
 
@@ -55,5 +57,5 @@ const getAuthenticationHeaders = (
 };
 
 export const config = {
-  matcher: ["/home:path*", "/profile", "/login", "/register"], // include login/register
+  matcher: ["/home:path*", "/profile", "/login", "/register"],
 };

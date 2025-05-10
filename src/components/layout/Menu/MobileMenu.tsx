@@ -1,8 +1,8 @@
 "use client";
+
 import { useGlobalContext } from "@/contexts/global.context";
 import Image from "next/image";
-import MenuItem from "./MenuItem";
-import { MENU_ITEMS } from "./types";
+import MenuItems from "./MenuItems";
 
 const MobileMenu = () => {
   const { isMenuOpen, toggleMenuOpen } = useGlobalContext();
@@ -35,11 +35,7 @@ const MobileMenu = () => {
           </h2>
         </header>
         <nav className="bg-primary h-full p-[16px]">
-          <ul>
-            {MENU_ITEMS.map((item) => (
-              <MenuItem key={item.path} {...item} />
-            ))}
-          </ul>
+          <MenuItems />
         </nav>
       </aside>
     </div>

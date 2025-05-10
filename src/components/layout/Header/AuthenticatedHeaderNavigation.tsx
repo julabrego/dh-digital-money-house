@@ -1,11 +1,9 @@
 "use client";
 
 import { useGlobalContext } from "@/contexts/global.context";
-import useNavigation from "@/hooks/useNavigation";
 import Image from "next/image";
 
 const AuthenticatedHeaderNavigation = () => {
-  const { goTo, pathName } = useNavigation();
   const { userData, toggleMenuOpen } = useGlobalContext();
 
   return userData ? (
@@ -19,7 +17,7 @@ const AuthenticatedHeaderNavigation = () => {
         alt="Menu"
         width={33}
         height={33}
-        className="h-[33px] w-[33px] md:hidden"
+        className="h-[33px] w-[33px] md:hidden cursor-pointer"
       />
     </div>
   ) : (

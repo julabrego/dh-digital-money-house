@@ -7,19 +7,13 @@ export type MenuProps = {
 
 export type MenuItemProps = {
   label: string;
-  path: string;
+  path?: string;
   isSemitransparent?: boolean;
+  onClick?: () => void;
 };
 
-const {
-  HOME,
-  ACTIVITY_LOG,
-  PROFILE,
-  CHARGE_MONEY,
-  PAY_SERVICES,
-  CARDS,
-  LOGOUT,
-} = PATHS;
+const { HOME, ACTIVITY_LOG, PROFILE, CHARGE_MONEY, PAY_SERVICES, CARDS } =
+  PATHS;
 
 export const MENU_ITEMS = [
   {
@@ -45,10 +39,5 @@ export const MENU_ITEMS = [
   {
     label: "Tarjetas",
     path: CARDS,
-  },
-  {
-    label: "Cerrar sesión",
-    path: LOGOUT,
-    isSemitransparent: true,
   },
 ];
