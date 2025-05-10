@@ -1,7 +1,7 @@
 import { User } from "@/types/user.types";
 import UserAPI from "./user.api";
 
-export default class UserService {
+ class UserService {
   private _userToken: string | undefined;
   private _userApi: UserAPI;
 
@@ -22,3 +22,7 @@ export default class UserService {
     return await this._userApi.getUser(id);
   };
 }
+
+const userService = new UserService();
+
+export default userService;

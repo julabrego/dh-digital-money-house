@@ -6,13 +6,18 @@ import {
 import { User } from "@/types/user.types";
 import authAPI from "./auth.api";
 
-export default class AuthService {
-  async login(email: string, password: string): Promise<LoginResponseType> {
-    const loginResponse = await authAPI.login(email, password);
-    if (loginResponse) {
-      localStorage.setItem("token", loginResponse.token);
-    }
-    return loginResponse;
+class AuthService {
+  async authenticate(
+    email: string,
+    password: string
+  ): Promise<LoginResponseType> {
+    const loginResponse = await authAPI.authenticate(email, password);
+    const expiresAt = await this.getSessionExpirationtime();
+
+    return {
+      token: loginResponse.token,
+      expiresAt,
+    };
   }
 
   async getAccountInfo(token: string): Promise<Account> {
@@ -37,7 +42,12 @@ export default class AuthService {
     });
   }
 
-  async logout(): Promise<void> {
-    await authAPI.logout();
+  async getSessionExpirationtime() {
+    const now = new Date();
+    return new Date(now.getTime() + 60 * 10 * 1000).getTime();
   }
 }
+
+const authService = new AuthService();
+
+export default authService;

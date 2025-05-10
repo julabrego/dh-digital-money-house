@@ -10,10 +10,9 @@ import { GeneralLayoutMode } from "../common/Layout/types";
 const { REGISTER, LOGIN, MAIN } = PATHS;
 
 const Header = ({ mode = "dark" }: HeaderProps) => {
-  const { onGoToLink, pathName } = useNavigation();
-  const { isUserAuthenticated, toggleMenuOpen, userData } = useGlobalContext();
+  const { goTo, pathName } = useNavigation();
+  const { userData, toggleMenuOpen } = useGlobalContext();
 
-  console.log({userData})
   return (
     <nav
       className={`fixed top-0 h-16 w-full overflow-x-hidden max-w-[100vw] ${
@@ -34,7 +33,7 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
           height={33}
           className="w-[63px] md:w-[83px]"
         />
-        {isUserAuthenticated ? (
+        {userData ? (
           <div className="flex gap-[12px] items-center">
             <div className="h-[33px] w-[39px] flex justify-center items-center rounded bg-primary text-background font-bold">
               MB
@@ -53,14 +52,14 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
             {isPathMain() && (
               <>
                 <Button
-                  onClick={() => onGoToLink(LOGIN)}
+                  onClick={() => goTo(LOGIN)}
                   mode={"secondary"}
                   size={"small"}
                 >
                   Ingresar
                 </Button>
                 <Button
-                  onClick={() => onGoToLink(REGISTER)}
+                  onClick={() => goTo(REGISTER)}
                   mode={"secondary"}
                   size={"small"}
                 >
@@ -71,7 +70,7 @@ const Header = ({ mode = "dark" }: HeaderProps) => {
 
             {isPathRegister() && (
               <Button
-                onClick={() => onGoToLink(LOGIN)}
+                onClick={() => goTo(LOGIN)}
                 mode={"primary"}
                 size={"small"}
               >

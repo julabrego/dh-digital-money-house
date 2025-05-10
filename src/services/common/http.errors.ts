@@ -12,8 +12,10 @@ export class ConflictError extends Error {
 }
 
 export class ApiError extends Error{
-    constructor(message: string){
+    code: number | undefined
+    constructor(message: string, code?: number ){
         super(message)
         this.name = "ServiceError"
+        this.code = code
     }
 }

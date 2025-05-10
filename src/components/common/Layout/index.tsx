@@ -9,7 +9,7 @@ import DesktopMenu from "@/components/layout/Menu/DesktopMenu";
 import useNavigation from "@/hooks/useNavigation";
 
 const GeneralLayout = ({ children, mode }: GeneralLayoutProps) => {
-  const { isUserAuthenticated, isMenuOpen, toggleMenuOpen } =
+  const { isMenuOpen, toggleMenuOpen, userData } =
     useGlobalContext();
   const { pathName } = useNavigation();
   return (
@@ -19,7 +19,7 @@ const GeneralLayout = ({ children, mode }: GeneralLayoutProps) => {
       }`}
     >
       <Header mode={mode} />
-      {pathName !== "/" && isUserAuthenticated && (
+      {pathName !== "/" && userData && (
         <>
           <MobileMenu isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
           <DesktopMenu />
@@ -31,7 +31,7 @@ const GeneralLayout = ({ children, mode }: GeneralLayoutProps) => {
   );
 
   function hasToShowMenu() {
-    return pathName !== "/" && isUserAuthenticated;
+    return pathName !== "/" && userData;
   }
 };
 

@@ -4,12 +4,12 @@ const useNavigation = () => {
   const router = useRouter();
   const pathName = usePathname();
 
-  const onGoToLink = (href: string) => {
+  const goTo = (href: string) => {
     router.push(href);
     router.refresh();
   };
 
-  return { onGoToLink, pathName };
+  return { goTo, pathName };
 };
 
 export default useNavigation;
