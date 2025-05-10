@@ -2,9 +2,9 @@
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Button from "@/components/common/Button";
 import TextInput from "@/components/common/TextInput";
-import Card from "@/components/mainPage/Card/indext";
 import { FormProvider, useForm } from "react-hook-form";
 import Image from "next/image";
+import Card from "@/components/common/Card";
 
 const HomePage = () => {
   return (
