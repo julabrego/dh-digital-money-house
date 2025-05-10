@@ -13,6 +13,8 @@
   --color-primary: #c1fd35;
   --color-secondary: #3a393e;
   --color-tertiary: #cecece;
+  --color-success: #c1fd35;
+  --color-warning: #ffcc00;
   --color-error: #da0000;
 }
 
@@ -36,6 +38,45 @@ button[disabled] {
 
 button:hover {
   @apply cursor-pointer;
+}
+
+h1.heading1 {
+  @apply text-[24pt];
+  @apply font-bold;
+}
+h2.heading2 {
+  @apply text-[20pt];
+  @apply font-bold;
+}
+h3.heading3 {
+  @apply text-[16pt];
+  @apply font-bold;
+}
+h4.heading4 {
+  @apply text-[14pt];
+  @apply font-bold;
+}
+h5.heading5 {
+  @apply text-[13pt];
+  @apply font-bold;
+}
+h6.heading6 {
+  @apply text-[12pt];
+  @apply font-bold;
+}
+
+span.text1 {
+  @apply text-[14pt];
+  @apply font-medium;
+}
+span.text2 {
+  @apply text-[12pt];
+  @apply font-medium;
+}
+span.error {
+  @apply text-[14pt];
+  @apply font-medium;
+  @apply text-error;
 }
 
 .button-small {

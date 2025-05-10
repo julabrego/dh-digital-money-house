@@ -3,7 +3,7 @@ const PATHS = {
   REGISTER: "/register",
   MAIN: "/",
   HOME: "/home",
-  ACTIVITY_LOG: "/activity-log",
+  TRANSACTION_LOG: "/transaction-log",
   PROFILE: "/profile",
   CHARGE_MONEY: "/charge-money",
   PAY_SERVICES: "/pay-services",
