@@ -24,7 +24,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="actions flex flex-col gap-[16px]">
+      <section className="actions flex flex-col lg:flex-row gap-[16px]">
         <Button mode="primary" size="large">
           Ingresar dinero
         </Button>

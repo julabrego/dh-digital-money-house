@@ -6,7 +6,7 @@ import MobileMenu from "@/components/layout/Menu/MobileMenu";
 import { GlobalContextProvider } from "@/contexts/global.context";
 import userApi from "@/services/user/user.api";
 import { headers } from "next/headers";
-import { GeneralLayoutProps } from "../GeneralLayout/types";
+import { GeneralLayoutProps } from "../../common/GeneralLayout/types";
 
 const AuthorizedLayout = async ({ children, mode }: GeneralLayoutProps) => {
   const token = (await headers()).get("x-access-token") ?? null;

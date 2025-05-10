@@ -1,4 +1,4 @@
-import AuthorizedLayout from "@/components/common/AuthorizedLayout";
+import AuthorizedLayout from "@/components/layout/AuthorizedLayout";
 import "../globals.css";
 
 export default function MainLayout({
