@@ -1,13 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-const isProduction = process.env.NODE_ENV === "production";
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const response = NextResponse.json({}, { status: 200 });
 
     response.cookies.delete("session-id");
     response.cookies.delete("user-id");
+    response.cookies.delete("account-id");
 
     return response;
   } catch (error) {

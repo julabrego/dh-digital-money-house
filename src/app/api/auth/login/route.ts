@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const loginResponse = await authService.authenticate(email, password);
-    const userData = await authService.getAccountInfo(loginResponse.token);
-    console.log({ loginResponse, userData });
+    const accountInfo = await authService.getAccountInfo(loginResponse.token);
 
     cookieStore.set("session-id", loginResponse.token, {
       expires: loginResponse.expiresAt,
@@ -22,7 +21,14 @@ export async function POST(request: NextRequest) {
       path: "/",
     });
 
-    cookieStore.set("user-id", String(userData.user_id), {
+    cookieStore.set("user-id", String(accountInfo.user_id), {
+      expires: loginResponse.expiresAt,
+      httpOnly: false,
+      secure: isProduction,
+      path: "/",
+    });
+    
+    cookieStore.set("account-id", String(accountInfo.id), {
       expires: loginResponse.expiresAt,
       httpOnly: false,
       secure: isProduction,

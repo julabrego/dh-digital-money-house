@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
     await authAPI.logout();
     cookieStore.delete("session-id");
     cookieStore.delete("user-id");
+    cookieStore.delete("account-id");
 
     if (!([PATHS.LOGIN, PATHS.REGISTER] as string[]).includes(pathname)) {
       return NextResponse.redirect(new URL(PATHS.LOGIN, request.url));
