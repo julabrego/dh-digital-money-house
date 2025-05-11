@@ -1,3 +1,6 @@
+"use client";
+
+import useNavigation from "@/hooks/useNavigation";
 import Image from "next/image";
 import { PropsWithChildren } from "react";
 import Typography from "../Typography";
@@ -5,17 +8,28 @@ import Typography from "../Typography";
 type CardFooterProps = PropsWithChildren & {
   className?: string;
   textClassName?: string;
-  onClick?: () => void;
+  footerClickPath?: string;
 };
 
 const CardFooter = ({
   children,
   className,
   textClassName,
-  onClick
+  footerClickPath,
 }: CardFooterProps) => {
+  const { goTo } = useNavigation();
+
+  const onClick = () => {
+    if (footerClickPath) {
+      goTo(footerClickPath);
+    }
+  };
+
   return (
-    <footer className={`pt-[16px] flex flex-row justify-between ${className} cursor-pointer`} onClick={onClick}>
+    <footer
+      className={`pt-[16px] flex flex-row justify-between ${className} cursor-pointer`}
+      onClick={onClick}
+    >
       <Typography type="heading6" className={textClassName}>
         {children}
       </Typography>

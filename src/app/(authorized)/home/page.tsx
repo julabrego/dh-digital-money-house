@@ -1,18 +1,25 @@
-"use client";
-import TransactionLogEntry from "@/components/activityLog/TransactionLogEntry";
+import TransactionLogs from "@/components/activityLog/TransactionLogs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Button from "@/components/common/Button";
 import CallToActionRow from "@/components/common/CallToActionRow";
 import Card from "@/components/common/Card";
 import CardFooter from "@/components/common/CardFooter";
 import CardHeader from "@/components/common/CardHeader";
-import TextInput from "@/components/common/TextInput";
+import SearchInput from "@/components/SearchInput";
 import PATHS from "@/config/routing/paths";
-import useNavigation from "@/hooks/useNavigation";
-import { FormProvider, useForm } from "react-hook-form";
+import transactionApi from "@/services/transaction/transaction.api";
+import { headers } from "next/headers";
 
-const HomePage = () => {
-  const {goTo} = useNavigation();
+const HomePage = async () => {
+  const token = (await headers()).get("x-access-token") ?? null;
+  const accountId = (await headers()).get("x-account-id") ?? null;
+
+  console.log({token, accountId})
+  const transactions =
+    accountId && token
+      ? await transactionApi.getTransactions({ accountId, token })
+      : null;
+
   return (
     <main className="main-panel w-full h-full flex flex-col gap-[16px] bg-[#eeeaea] p-[16px]">
       <Breadcrumbs title="Inicio" />
@@ -46,40 +53,19 @@ const HomePage = () => {
       </section>
 
       <section className="activity_log flex flex-col gap-[16px]">
-        <Filters />
+        <SearchInput />
 
         <Card>
           <CardHeader>Tu actividad</CardHeader>
 
-          {[1, 2, 3, 4, 5].map((i) => (
-            <TransactionLogEntry
-              key={i}
-              status={"success"}
-              description={"hola"}
-              amount={1234}
-              dated={"Ayer"}
-            />
-          ))}
+          <TransactionLogs transactions={transactions || []} limit={5} />
 
-          <CardFooter onClick={() => {
-            goTo(PATHS.TRANSACTION_LOG)
-          }}>Ver toda tu actividad</CardFooter>
-
+          <CardFooter footerClickPath={PATHS.TRANSACTION_LOG}>
+            Ver toda tu actividad
+          </CardFooter>
         </Card>
       </section>
     </main>
-  );
-};
-
-const Filters = () => {
-  const methods = useForm({});
-
-  return (
-    <FormProvider {...methods}>
-      <section className="filters">
-        <TextInput placeholder="Buscar" name={"search"} />
-      </section>
-    </FormProvider>
   );
 };
 

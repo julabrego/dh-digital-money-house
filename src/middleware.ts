@@ -23,7 +23,8 @@ export async function middleware(request: NextRequest) {
     return getAuthenticationHeaders(
       request,
       sessionId,
-      String(accountInfo.user_id)
+      String(accountInfo.user_id),
+      String(accountInfo.id),
     );
   } catch (e) {
     console.error(e);
@@ -44,11 +45,13 @@ export async function middleware(request: NextRequest) {
 const getAuthenticationHeaders = (
   request: NextRequest,
   accessToken: string,
-  userId: string
+  userId: string,
+  accountId: string,
 ) => {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-access-token", accessToken);
   requestHeaders.set("x-user-id", userId);
+  requestHeaders.set("x-account-id", accountId);
 
   return NextResponse.next({
     request: {

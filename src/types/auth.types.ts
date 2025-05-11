@@ -19,3 +19,8 @@ export type AuthResponseType = {
   user: User;
   expiresAt: number;
 };
+
+export type AuthRequestParams = {
+  accountId: string,
+  token: string
+}

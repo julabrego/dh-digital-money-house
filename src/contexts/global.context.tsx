@@ -1,16 +1,13 @@
 "use client";
 
 import authAPI from "@/services/auth/auth.api";
+import { AuthRequestParams } from "@/types/auth.types";
 import { User } from "@/types/user.types";
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useState,
-} from "react";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 type GlobalContextState = {
   userData: User | null;
+  authData: AuthRequestParams | null;
   toggleMenuOpen: () => void;
   isMenuOpen: boolean;
   handleLogout: () => Promise<void>;
@@ -20,9 +17,14 @@ const GlobalContext = createContext<GlobalContextState | undefined>(undefined);
 
 type GlobalContextProps = PropsWithChildren & {
   userData: User | null;
+  authData: AuthRequestParams | null;
 };
 
-const GlobalContextProvider = ({ userData, children }: GlobalContextProps) => {
+const GlobalContextProvider = ({
+  authData,
+  userData,
+  children,
+}: GlobalContextProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenuOpen = () => {
@@ -33,7 +35,13 @@ const GlobalContextProvider = ({ userData, children }: GlobalContextProps) => {
     await authAPI.logout();
   };
 
-  const value = { userData, toggleMenuOpen, isMenuOpen, handleLogout };
+  const value = {
+    authData,
+    userData,
+    toggleMenuOpen,
+    isMenuOpen,
+    handleLogout,
+  };
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
