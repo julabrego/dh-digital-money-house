@@ -1,3 +1,4 @@
+import { formatArgentinePesos } from "@/app/utils/number-utils";
 import StatusCircle from "@/components/common/StatusCircle";
 
 type TransactionLogEntryProps = {
@@ -18,7 +19,7 @@ const TransactionLogEntry = ({
       <StatusCircle status={status} />
       <div className="grow items-center">{description}</div>
       <div className="flex flex-col">
-        <div className="text-[14px] text-right">${amount}</div>
+        <div className="text-[14px] text-right">{formatArgentinePesos(amount)}</div>
         <div className="text-[12px] text-right text-gray-400">{dated}</div>
       </div>
     </article>

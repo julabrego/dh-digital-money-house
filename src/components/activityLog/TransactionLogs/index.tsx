@@ -11,7 +11,7 @@ const TransactionLogs = ({ transactions, limit }: TransactionLogsProps) => {
   const limitedTransactions = transactions.slice(
     0,
     limit || transactions.length
-  );
+  ).sort((a, b) => new Date(b.dated).getTime() - new Date(a.dated).getTime());
   
   return limitedTransactions.map((transaction) => (
     <TransactionLogEntry

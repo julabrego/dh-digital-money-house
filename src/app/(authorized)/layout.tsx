@@ -1,10 +1,10 @@
-import AuthorizedLayout from "@/components/layout/AuthorizedLayout";
+import GeneralLayout from "@/components/common/GeneralLayout";
 import "../globals.css";
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <AuthorizedLayout>{children}</AuthorizedLayout>;
+  return <GeneralLayout>{children}</GeneralLayout>;
 }

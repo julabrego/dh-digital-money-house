@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
     cookieStore.delete("user-id");
     cookieStore.delete("account-id");
 
-    if (!([PATHS.LOGIN, PATHS.REGISTER] as string[]).includes(pathname)) {
+    if (!([PATHS.MAIN, PATHS.LOGIN, PATHS.REGISTER] as string[]).includes(pathname)) {
       return NextResponse.redirect(new URL(PATHS.LOGIN, request.url));
     }
 
@@ -61,5 +61,5 @@ const getAuthenticationHeaders = (
 };
 
 export const config = {
-  matcher: ["/home:path*", "/profile", "/login", "/register"],
+  matcher: ["/", "/home:path*", "/profile", "/login", "/register"],
 };

@@ -1,6 +1,13 @@
+"use client";
+import useNavigation from "@/hooks/useNavigation";
 import MenuItems from "./MenuItems";
+import PATHS from "@/config/routing/paths";
 
 const DesktopMenu = () => {
+  const { pathName } = useNavigation();
+
+  if (pathName === PATHS.MAIN) return <></>;
+  
   return (
     <div className="hidden md:block sticky left-0 top-0 w-full h-screen self-baseline">
       <aside
