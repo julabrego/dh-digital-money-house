@@ -223,3 +223,15 @@ input[disabled] {
   @apply shadow-md;
   @apply w-full;
 }
+
+.main-panel section .profile-data input {
+  @apply w-full;
+  @apply bg-white;
+  @apply text-black;
+  @apply border-0;
+  @apply rounded-none;
+  @apply outline-none;
+  @apply shadow-none;
+  @apply p-0;
+  @apply text-[16px];
+}

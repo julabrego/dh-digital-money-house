@@ -42,9 +42,28 @@ class AuthService {
     });
   }
 
+  async update(
+    userId: string,
+    { dni, email, firstname, lastname, password, phone }: Partial<User>,
+    accessToken: string
+  ): Promise<User> {
+    return await authAPI.update(
+      userId,
+      {
+        dni,
+        email,
+        firstname,
+        lastname,
+        password,
+        phone,
+      },
+      accessToken
+    );
+  }
+
   async getSessionExpirationtime() {
     const now = new Date();
-    return new Date(now.getTime() + 60 * 10 * 1000).getTime();
+    return new Date(now.getTime() + 60 * 6000 * 1000).getTime();
   }
 }
 

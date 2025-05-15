@@ -14,7 +14,9 @@ class HttpBaseAPI {
     params?: URLSearchParams,
     accessToken?: string
   ): Promise<T> {
-    console.log(`${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`)
+    console.log(
+      `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`
+    );
     const res = await fetch(
       `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`,
       {
@@ -57,7 +59,7 @@ class HttpBaseAPI {
         ? { "Content-Type": "application/json" }
         : {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `${accessToken}`,
           },
       body: JSON.stringify(body),
     });
@@ -75,6 +77,41 @@ class HttpBaseAPI {
   };
 
   httpPostPublic = async <T>(
+    endpointSuffix: string,
+    body: object
+  ): Promise<T> => {
+    return this.httpPost(`${this.publicEndpointSuffix}${endpointSuffix}`, body);
+  };
+
+  httpPatch = async <T>(
+    endpointSuffix: string,
+    body: object,
+    accessToken?: string
+  ): Promise<T> => {
+    const res = await fetch(`${this.privateEndpoint}${endpointSuffix}`, {
+      method: "PATCH",
+      headers: !accessToken
+        ? { "Content-Type": "application/json" }
+        : {
+            "Content-Type": "application/json",
+            Authorization: `${accessToken}`,
+          },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      if (errorResponse.error) {
+        throw new ApiError(errorResponse.error, res.status);
+      } else {
+        throw new Error("Internal Server Error");
+      }
+    }
+
+    return res.json();
+  };
+
+  httpPatchPublic = async <T>(
     endpointSuffix: string,
     body: object
   ): Promise<T> => {
