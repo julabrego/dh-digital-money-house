@@ -8,11 +8,16 @@ import httpInternalAPI from "../common/http.internal.service";
 import httpExternalAPI from "../common/http.external.service";
 
 class AuthAPI {
-
-  login = async (email: string, password: string): Promise<ApiLoginResponseType> =>
+  login = async (
+    email: string,
+    password: string
+  ): Promise<ApiLoginResponseType> =>
     httpInternalAPI.httpPost(`/auth/login`, { email, password });
-  
-  authenticate = async (email: string, password: string): Promise<ApiLoginResponseType> =>
+
+  authenticate = async (
+    email: string,
+    password: string
+  ): Promise<ApiLoginResponseType> =>
     httpExternalAPI.httpPostPublic(`/login`, { email, password });
 
   register = async ({
@@ -31,6 +36,31 @@ class AuthAPI {
       password,
       phone,
     });
+
+  update = async (
+    userId: string,
+    {
+      dni,
+      email,
+      firstname,
+      lastname,
+      password,
+      phone,
+    }: Partial<User>,
+    accessToken: string
+  ): Promise<User> =>
+    httpExternalAPI.httpPatch(
+      `/api/users/${userId}`,
+      {
+        dni,
+        email,
+        firstname,
+        lastname,
+        password,
+        phone,
+      },
+      accessToken
+    );
 
   logout = async (): Promise<ApiLoginResponseType> =>
     httpInternalAPI.httpGetPublic(`/auth/logout`);
