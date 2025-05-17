@@ -1,6 +1,5 @@
 "use client";
-
-import useNavigation from "@/hooks/useNavigation";
+import Link from "next/link";
 import { MenuItemProps } from "./types";
 import { useNavigationMenuContext } from "@/contexts/global.context";
 
@@ -10,25 +9,47 @@ const MenuItem = ({
   isSemitransparent,
   onClick,
 }: MenuItemProps) => {
-  const { goTo, pathName } = useNavigation();
   const { isMenuOpen, toggleMenuOpen } = useNavigationMenuContext();
 
   const handleClick = () => {
     if (onClick) onClick();
     if (isMenuOpen) toggleMenuOpen();
-    if (path) goTo(path);
   };
 
-  const isActive = path === pathName;
+  if (!path) {
+    return (
+      <li
+        className={`mb-[12px] ${
+          isSemitransparent ? "opacity-50" : ""
+        } cursor-pointer`}
+      >
+        <a
+          className={`font-bold cursor-pointer ${
+            isSemitransparent ? "opacity-50" : ""
+          }`}
+          onClick={handleClick}
+        >
+          {label}
+        </a>
+      </li>
+    );
+  }
 
   return (
     <li
-      className={`mb-[12px] ${isActive ? "font-bold" : "font-semibold"} ${
+      className={`mb-[12px] ${
         isSemitransparent ? "opacity-50" : ""
       } cursor-pointer`}
-      onClick={handleClick}
     >
-      {label}
+      <Link
+        href={path}
+        className={`font-bold cursor-pointer ${
+          isSemitransparent ? "opacity-50" : ""
+        }`}
+        onClick={handleClick}
+      >
+        {label}
+      </Link>
     </li>
   );
 };
