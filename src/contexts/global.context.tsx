@@ -1,61 +1,77 @@
 "use client";
 
-import authAPI from "@/services/auth/auth.api";
-import { AuthRequestParams } from "@/types/auth.types";
-import { User } from "@/types/user.types";
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import userApi from "@/services/user/user.api";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useHeadersContext } from "./headers.context";
 
-type GlobalContextState = {
-  userData: User | null;
-  authData: AuthRequestParams | null;
+type NavigationMenuContextValue = PropsWithChildren & {
   toggleMenuOpen: () => void;
   isMenuOpen: boolean;
-  handleLogout: () => Promise<void>;
+  userNameData: {
+    fullName: string;
+    initials: string;
+  };
 };
 
-const GlobalContext = createContext<GlobalContextState | undefined>(undefined);
+const NavigationMenuContext = createContext<
+  NavigationMenuContextValue | undefined
+>(undefined);
 
-type GlobalContextProps = PropsWithChildren & {
-  userData: User | null;
-  authData: AuthRequestParams | null;
-};
-
-const GlobalContextProvider = ({
-  authData,
-  userData,
-  children,
-}: GlobalContextProps) => {
+const NavigationMenuContextProvider = ({ children }: PropsWithChildren) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userNameData, setUserNameData] = useState({
+    fullName: "",
+    initials: "",
+  });
+
+  const { userId, token } = useHeadersContext();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (userId && token) {
+        const userData = await userApi.getUser(userId, token);
+
+        setUserNameData({
+          fullName: userData.firstname + " " + userData.lastname,
+          initials:
+            (userData.firstname || "")[0] + (userData.lastname || "")[0],
+        });
+      }
+    };
+    fetchUserData();
+  }, [token, userId]);
 
   const toggleMenuOpen = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogout = async () => {
-    await authAPI.logout();
-  };
-
   const value = {
-    authData,
-    userData,
     toggleMenuOpen,
     isMenuOpen,
-    handleLogout,
+    userNameData,
   };
 
   return (
-    <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
+    <NavigationMenuContext.Provider value={value}>
+      {children}
+    </NavigationMenuContext.Provider>
   );
 };
 
-const useGlobalContext = () => {
-  const context = useContext(GlobalContext);
+const useNavigationMenuContext = () => {
+  const context = useContext(NavigationMenuContext);
   if (!context) {
     throw new Error(
-      "useGlobalContext must be used within a GlobalContextProvider"
+      "useNavigationMenuContext must be used within a NavigationMenuContextProvider"
     );
   }
   return context;
 };
 
-export { GlobalContextProvider, useGlobalContext };
+export { NavigationMenuContextProvider, useNavigationMenuContext };

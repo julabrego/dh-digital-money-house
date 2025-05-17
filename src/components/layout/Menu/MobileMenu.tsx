@@ -1,11 +1,11 @@
 "use client";
 
-import { useGlobalContext } from "@/contexts/global.context";
+import { useNavigationMenuContext } from "@/contexts/global.context";
 import Image from "next/image";
 import MenuItems from "./MenuItems";
 
 const MobileMenu = () => {
-  const { isMenuOpen, toggleMenuOpen } = useGlobalContext();
+  const { isMenuOpen, toggleMenuOpen } = useNavigationMenuContext();
   return (
     <div className="md:hidden fixed top-0 w-full h-screen z-30 contents">
       {isMenuOpen && (
