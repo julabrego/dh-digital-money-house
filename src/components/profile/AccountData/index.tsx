@@ -1,12 +1,14 @@
 "use client";
 
 import { copyToClipboard } from "@/app/utils/clipboard";
+import { EditableInput } from "@/components/common/form/EditableInput";
 import Typography from "@/components/common/Typography";
 import { useHeadersContext } from "@/contexts/headers.context";
 import authAPI from "@/services/auth/auth.api";
+import authService from "@/services/auth/auth.service";
 import { Account } from "@/types/accout.types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const AccountData = () => {
   const [accountData, setAccountData] = useState<Account | null>(null);
@@ -24,15 +26,42 @@ export const AccountData = () => {
 
   return (
     <>
-      <DataDetails label={"Alias"} value={accountData.alias} />
+      <DataRow label={"Alias"} value={accountData.alias} fieldName={"alias"} />
       <div className="border-b-1 border-b-white w-full" />
-      <DataDetails label={"CVU"} value={String(accountData.cvu)} />
+      <DataRow label={"CVU"} value={String(accountData.cvu)} fieldName="cvu" />
     </>
   );
 };
 
-const DataDetails = ({ label, value }: { label: string; value: string }) => {
+const DataRow = ({
+  label,
+  fieldName,
+  value,
+}: {
+  label: string;
+  fieldName: string;
+  value: string;
+}) => {
+  const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [internalValue, setInternalValue] = useState(value);
+  const { token, accountId } = useHeadersContext();
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSubmit = async () => {
+    return authService
+      .updateAccount(
+        accountId!,
+        {
+          [fieldName]: inputRef.current?.value,
+        },
+        token!
+      )
+      .then((newValue) => {
+        setInternalValue(String(newValue[fieldName as keyof Account]) ?? value);
+      });
+  };
 
   const handleCopy = (value: string) => {
     copyToClipboard(value)
@@ -48,14 +77,26 @@ const DataDetails = ({ label, value }: { label: string; value: string }) => {
       });
   };
   return (
-    <article className="grid grid-cols-[1fr_min-content] pb-[16px]">
-      <div>
+    <article className="account-data-container grid grid-cols-[1fr_min-content] pb-[16px]">
+      <div onClick={() => setEditMode(true)}>
         <Typography type={"heading3"} className="text-primary">
           {label}
         </Typography>
-        <Typography type={"text2"} className="font-normal">
-          {value}
-        </Typography>
+        {editMode ? (
+          <EditableInput
+            inputRef={inputRef}
+            fieldName={fieldName}
+            value={internalValue}
+            onBlur={() => setEditMode(false)}
+            label={label}
+            onSubmit={handleSubmit}
+            className="bg-none"
+          />
+        ) : (
+          <Typography type={"text2"} className="font-normal">
+            {internalValue}
+          </Typography>
+        )}
       </div>
       <div className="w-[24px] flex items-center relative">
         <>

@@ -243,3 +243,16 @@ input[disabled] {
   @apply p-0;
   @apply text-[16px];
 }
+
+
+.account-data-container input {
+  @apply w-full;
+  @apply bg-black;
+  @apply text-white;
+  @apply border-0;
+  @apply rounded-none;
+  @apply outline-none;
+  @apply shadow-none;
+  @apply p-0;
+  @apply text-[16px];
+}

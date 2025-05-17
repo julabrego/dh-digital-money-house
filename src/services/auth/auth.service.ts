@@ -61,6 +61,21 @@ class AuthService {
     );
   }
 
+  async updateAccount(
+    userId: string,
+    { alias, cvu }: Partial<Account>,
+    accessToken: string
+  ): Promise<Account> {
+    return await authAPI.updateAccount(
+      userId,
+      {
+        alias,
+        cvu,
+      },
+      accessToken
+    );
+  }
+
   async getSessionExpirationtime() {
     const now = new Date();
     return new Date(now.getTime() + 60 * 6000 * 1000).getTime();

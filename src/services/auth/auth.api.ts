@@ -39,14 +39,7 @@ class AuthAPI {
 
   update = async (
     userId: string,
-    {
-      dni,
-      email,
-      firstname,
-      lastname,
-      password,
-      phone,
-    }: Partial<User>,
+    { dni, email, firstname, lastname, password, phone }: Partial<User>,
     accessToken: string
   ): Promise<User> =>
     httpExternalAPI.httpPatch(
@@ -58,6 +51,20 @@ class AuthAPI {
         lastname,
         password,
         phone,
+      },
+      accessToken
+    );
+
+  updateAccount = async (
+    accountId: string,
+    { alias, cvu }: Partial<Account>,
+    accessToken: string
+  ): Promise<Account> =>
+    httpExternalAPI.httpPatch(
+      `/api/accounts/${accountId}`,
+      {
+        alias,
+        cvu,
       },
       accessToken
     );
