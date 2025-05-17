@@ -9,10 +9,6 @@ import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-// type ProfileDataProps = {
-//   userData: User;
-// };
-
 const ProfileData = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const { userId, token, accountId } = useHeadersContext();
@@ -83,7 +79,7 @@ const ProfileRow = ({
   value,
   setUserData,
   secret,
-  readOnly
+  readOnly,
 }: ProfileRowProps) => {
   const [editMode, setEditMode] = useState(false);
 

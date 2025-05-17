@@ -39,8 +39,8 @@ const ProfilePage = async () => {
           <CallToActionRow>
             <Button
               mode="primary"
-              size="large"
-              className="flex flex-row justify-between items-center p-0"
+              className="flex flex-row justify-between items-center pl-0"
+              size="xlarge"
             >
               <Typography type={"heading4"}>
                 Gestioná los medios de pago
@@ -64,9 +64,7 @@ const ProfilePage = async () => {
                 otra cuenta
               </p>
             </article>
-            <AccountData label={"CVU"} value={"00000000000000000000"} />
-            <div className="border-b-1 border-b-white w-full mb-[16px]"></div>
-            <AccountData label={"Alias"} value={"estealiasnoexiste"} />
+            <AccountData />
           </Card>
         </section>
       </main>
