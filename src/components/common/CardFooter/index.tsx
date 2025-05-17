@@ -9,6 +9,7 @@ type CardFooterProps = PropsWithChildren & {
   className?: string;
   textClassName?: string;
   footerClickPath?: string;
+  arrowColor?: "default" | "black";
 };
 
 const CardFooter = ({
@@ -16,6 +17,7 @@ const CardFooter = ({
   className,
   textClassName,
   footerClickPath,
+  arrowColor,
 }: CardFooterProps) => {
   const { goTo } = useNavigation();
 
@@ -34,7 +36,11 @@ const CardFooter = ({
         {children}
       </Typography>
       <Image
-        src={"/images/right-arrow.png"}
+        src={
+          arrowColor === "black"
+            ? "/images/right-arrow-black.png"
+            : "/images/right-arrow.png"
+        }
         alt={"Ver toda tu actividad"}
         width={14}
         height={14}

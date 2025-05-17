@@ -2,11 +2,13 @@ import Button from "@/components/common/Button";
 import CallToActionRow from "@/components/common/CallToActionRow";
 import Card from "@/components/common/Card";
 import Typography from "@/components/common/Typography";
+import { AccountData } from "@/components/profile/AccountData";
 import ProfileData from "@/components/profile/ProfileData";
 import PATHS from "@/config/routing/paths";
 import { HeadersContextProvider } from "@/contexts/headers.context";
 import authAPI from "@/services/auth/auth.api";
 import { headers } from "next/headers";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 const ProfilePage = async () => {
@@ -33,32 +35,39 @@ const ProfilePage = async () => {
             <ProfileData />
           </Card>
         </section>
-        <section className="summary">
-          <Card mode="dark">
-            <div className="w-full flex flex-row gap-[16px] justify-end mb-[14px]">
-              <p className="text-[12px] hover:underline cursor-pointer">
-                Ver tarjetas
-              </p>
-              <p className="text-[12px] hover:underline cursor-pointer">
-                Ver CVU
-              </p>
-            </div>
-            <p className="text-[16px] mb-[8px]">Dinero disponible</p>
-            <div className="px-[16px] py-[8px] border border-primary rounded-[100px] w-fit min-w-[100px] text-center">
-              <p className="text-[24px] font-semibold">$6.890.534,17</p>
-            </div>
-          </Card>
-        </section>
-
         <section className="call-to-actions">
           <CallToActionRow>
-            <Button mode="primary" size="large">
-              Ingresar dinero
-            </Button>
-            <Button mode="primary" size="large">
-              Pago de servicios
+            <Button
+              mode="primary"
+              size="large"
+              className="flex flex-row justify-between items-center p-0"
+            >
+              <Typography type={"heading4"}>
+                Gestioná los medios de pago
+              </Typography>
+              <Image
+                src={"/images/right-arrow-black.png"}
+                alt={"Gestioná los medios de pago"}
+                width={14}
+                height={14}
+                className="w-[14px] h-[14px]"
+              />
             </Button>
           </CallToActionRow>
+        </section>
+
+        <section className="cvu">
+          <Card mode="dark">
+            <article className="w-full flex flex-row gap-[16px] justify-end mb-[14px]">
+              <p className="text-[16px] mb-[8px]">
+                Copia tu cvu o alias para ingresar o transferir dinero desde
+                otra cuenta
+              </p>
+            </article>
+            <AccountData label={"CVU"} value={"00000000000000000000"} />
+            <div className="border-b-1 border-b-white w-full mb-[16px]"></div>
+            <AccountData label={"Alias"} value={"estealiasnoexiste"} />
+          </Card>
         </section>
       </main>
     </HeadersContextProvider>

@@ -27,7 +27,7 @@ const Typography = ({ children, type, className }: TypographyProps) => {
   const Component =
     headingComponents[type as keyof typeof headingComponents] || "span";
 
-  return <Component className={type}>{children}</Component>;
+  return <Component className={`${type} ${className}`}>{children}</Component>;
 };
 
 export default Typography;
