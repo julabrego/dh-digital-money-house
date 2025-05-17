@@ -2,6 +2,7 @@
 
 import useNavigation from "@/hooks/useNavigation";
 import { MenuItemProps } from "./types";
+import { useNavigationMenuContext } from "@/contexts/global.context";
 
 const MenuItem = ({
   label,
@@ -10,9 +11,11 @@ const MenuItem = ({
   onClick,
 }: MenuItemProps) => {
   const { goTo, pathName } = useNavigation();
+  const { isMenuOpen, toggleMenuOpen } = useNavigationMenuContext();
 
   const handleClick = () => {
     if (onClick) onClick();
+    if (isMenuOpen) toggleMenuOpen();
     if (path) goTo(path);
   };
 

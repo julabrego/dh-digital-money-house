@@ -5,7 +5,7 @@ import Image from "next/image";
 import MenuItems from "./MenuItems";
 
 const MobileMenu = () => {
-  const { isMenuOpen, toggleMenuOpen } = useNavigationMenuContext();
+  const { isMenuOpen, toggleMenuOpen, userNameData } = useNavigationMenuContext();
   return (
     <div className="md:hidden fixed top-0 w-full h-screen z-30 contents">
       {isMenuOpen && (
@@ -31,7 +31,7 @@ const MobileMenu = () => {
           </div>
           <h2 className="font-bold px-[16px] pt-[16px] pb-[8px]">
             Hola,
-            <br /> Juan Perez
+            <br /> {userNameData.fullName}
           </h2>
         </header>
         <nav className="bg-primary h-full p-[16px]">
