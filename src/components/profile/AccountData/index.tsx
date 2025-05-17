@@ -4,6 +4,7 @@ import { copyToClipboard } from "@/app/utils/clipboard";
 import { EditableInput } from "@/components/common/form/EditableInput";
 import Typography from "@/components/common/Typography";
 import { useHeadersContext } from "@/contexts/headers.context";
+import AccountDataSchema from "@/schemas/accountData.schema";
 import authAPI from "@/services/auth/auth.api";
 import authService from "@/services/auth/auth.service";
 import { Account } from "@/types/accout.types";
@@ -28,7 +29,12 @@ export const AccountData = () => {
     <>
       <DataRow label={"Alias"} value={accountData.alias} fieldName={"alias"} />
       <div className="border-b-1 border-b-white w-full" />
-      <DataRow label={"CVU"} value={String(accountData.cvu)} fieldName="cvu" />
+      <DataRow
+        label={"CVU"}
+        value={String(accountData.cvu)}
+        fieldName="cvu"
+        readOnly={true}
+      />
     </>
   );
 };
@@ -37,10 +43,12 @@ const DataRow = ({
   label,
   fieldName,
   value,
+  readOnly,
 }: {
   label: string;
   fieldName: string;
   value: string;
+  readOnly?: boolean;
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -76,13 +84,14 @@ const DataRow = ({
         setIsCopied(false);
       });
   };
+
   return (
     <article className="account-data-container grid grid-cols-[1fr_min-content] pb-[16px]">
-      <div onClick={() => setEditMode(true)}>
+      <div onClick={() => !readOnly && setEditMode(true)}>
         <Typography type={"heading3"} className="text-primary">
           {label}
         </Typography>
-        {editMode ? (
+        {!readOnly && editMode ? (
           <EditableInput
             inputRef={inputRef}
             fieldName={fieldName}
@@ -91,6 +100,7 @@ const DataRow = ({
             label={label}
             onSubmit={handleSubmit}
             className="bg-none"
+            validationSchema={AccountDataSchema}
           />
         ) : (
           <Typography type={"text2"} className="font-normal">

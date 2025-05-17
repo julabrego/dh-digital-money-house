@@ -1,6 +1,9 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { RefObject, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { AnyObjectSchema } from "yup";
 import TextInput from "../../TextInput";
+import Typography from "../../Typography";
 
 type EditableInputProps = {
   fieldName: string;
@@ -11,6 +14,7 @@ type EditableInputProps = {
   onBlur: () => void;
   inputRef: RefObject<HTMLInputElement | null>;
   className?: string;
+  validationSchema?: AnyObjectSchema;
 };
 
 export const EditableInput = ({
@@ -22,12 +26,23 @@ export const EditableInput = ({
   onSubmit,
   inputRef,
   className,
+  validationSchema,
 }: EditableInputProps) => {
-  const [error, setError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const methods = useForm({});
-  const { setValue, getValues } = methods;
+  const methods = useForm({
+    resolver: validationSchema ? yupResolver(validationSchema) : undefined,
+    defaultValues: {
+      [fieldName]: value,
+    },
+  });
+
+  const {
+    setValue,
+    getValues,
+    formState: { errors },
+  } = methods;
 
   useEffect(() => {
     if (!inputRef) return;
@@ -41,17 +56,20 @@ export const EditableInput = ({
   }, [fieldName, methods, secret, setValue, value]);
 
   const handleComponentSubmit = async () => {
-    setError(null);
+    setServerError(null);
 
     try {
+      const isValid = await methods.trigger();
+      if (!isValid) return;
+
       setIsLoading(true);
       await methods.handleSubmit(onSubmit)();
       onBlur();
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        setServerError(error.message);
       } else {
-        setError("Ocurrió un error inesperado");
+        setServerError("Ocurrió un error inesperado");
       }
     } finally {
       setIsLoading(false);
@@ -80,7 +98,13 @@ export const EditableInput = ({
             className={className}
           />
         </form>
-        {error && <p className="text-red-500">{error}</p>}
+        {serverError ? (
+          <Typography type="error">{serverError}</Typography>
+        ) : (
+          errors[fieldName] && (
+            <Typography type="error">{errors[fieldName].message?.toString()}</Typography>
+          )
+        )}
       </section>
     </FormProvider>
   );
