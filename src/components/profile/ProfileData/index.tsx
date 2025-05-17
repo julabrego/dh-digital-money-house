@@ -1,13 +1,13 @@
 "use client";
 
-import TextInput from "@/components/common/TextInput";
+import { EditableInput } from "@/components/common/form/EditableInput";
 import { useHeadersContext } from "@/contexts/headers.context";
+import RegisterSchema from "@/schemas/register.schema";
 import authService from "@/services/auth/auth.service";
 import userApi from "@/services/user/user.api";
 import { User } from "@/types/user.types";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 
 const ProfileData = () => {
   const [userData, setUserData] = useState<User | null>(null);
@@ -22,7 +22,7 @@ const ProfileData = () => {
       setUserData(userData);
     };
     fetchUserData();
-  }, []);
+  }, [accountId, token, userId]);
 
   if (!userData) return <>Loading...</>;
 
@@ -66,7 +66,7 @@ const ProfileData = () => {
 
 type ProfileRowProps = {
   label: string;
-  fieldName: string;
+  fieldName: keyof User;
   value: string;
   secret?: boolean;
   setUserData: Dispatch<SetStateAction<User | null>>;
@@ -82,6 +82,22 @@ const ProfileRow = ({
   readOnly,
 }: ProfileRowProps) => {
   const [editMode, setEditMode] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { token, userId } = useHeadersContext();
+
+  const handleSubmit = async () => {
+    return await authService
+      .update(
+        userId!,
+        {
+          [fieldName]: inputRef.current?.value,
+        },
+        token!
+      )
+      .then((updatedUserData) => {
+        setUserData(updatedUserData);
+      });
+  };
 
   return (
     <div className="profile-data flex flex-row justify-between py-[8px] border-b-1 border-b-gray-400">
@@ -89,12 +105,14 @@ const ProfileRow = ({
         <p className="text-[16px] md:min-w-[200px]">{label}</p>
         {editMode ? (
           <EditableInput
+            inputRef={inputRef}
             fieldName={fieldName}
             value={value}
             onBlur={() => setEditMode(false)}
             label={label}
-            setUserData={setUserData}
+            onSubmit={handleSubmit}
             secret={secret}
+            validationSchema={RegisterSchema.pick([fieldName])}
           />
         ) : (
           <p className="text-[16px] opacity-50">{value}</p>
@@ -112,88 +130,6 @@ const ProfileRow = ({
         </p>
       )}
     </div>
-  );
-};
-
-type EditableInputProps = ProfileRowProps & {
-  onBlur: () => void;
-};
-
-const EditableInput = ({
-  fieldName,
-  label,
-  value,
-  secret,
-  onBlur,
-  setUserData,
-}: EditableInputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { userId, token } = useHeadersContext();
-  const methods = useForm({});
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [inputRef]);
-
-  useEffect(() => {
-    methods.setValue(fieldName, secret ? "" : value);
-  }, [fieldName, methods, secret, value]);
-
-  const onSubmit = async () => {
-    setError(null);
-
-    try {
-      setIsLoading(true);
-
-      const updatedUserData = await authService.update(
-        userId!,
-        {
-          [fieldName]: inputRef.current?.value,
-        },
-        token!
-      );
-
-      setUserData(updatedUserData);
-      onBlur();
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("Ocurrió un error inesperado");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <FormProvider {...methods}>
-      <section className="filters">
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <TextInput
-            value={methods.getValues(fieldName) ?? ""}
-            ref={inputRef}
-            placeholder={label}
-            name={fieldName}
-            onBlur={onBlur}
-            disabled={isLoading}
-            {...(secret && { type: "password" })}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                methods.handleSubmit(onSubmit)();
-              } else if (e.key === "Escape") {
-                onBlur();
-              }
-            }}
-          />
-        </form>
-        {error && <p className="text-red-500">{error}</p>}
-      </section>
-    </FormProvider>
   );
 };
 

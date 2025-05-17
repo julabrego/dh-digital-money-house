@@ -39,17 +39,14 @@ export const AccountData = () => {
   );
 };
 
-const DataRow = ({
-  label,
-  fieldName,
-  value,
-  readOnly,
-}: {
+type DataRowProps = {
   label: string;
-  fieldName: string;
+  fieldName: keyof Account;
   value: string;
   readOnly?: boolean;
-}) => {
+};
+
+const DataRow = ({ label, fieldName, value, readOnly }: DataRowProps) => {
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
