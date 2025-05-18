@@ -2,18 +2,17 @@
 
 import Button from "@/components/common/Button";
 import PATHS from "@/config/routing/paths";
-import useNavigation from "@/hooks/useNavigation";
+import Link from "next/link";
 
 const { LOGIN } = PATHS;
 
 const RegisterPageNavigationButtons = () => {
-  const { goTo } = useNavigation();
   return (
-    <>
-      <Button onClick={() => goTo(LOGIN)} mode={"primary"} size={"small"}>
+    <Link href={LOGIN}>
+      <Button mode={"primary"} size={"small"}>
         Iniciar sesión
       </Button>
-    </>
+    </Link>
   );
 };
 

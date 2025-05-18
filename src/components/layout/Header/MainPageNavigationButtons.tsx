@@ -3,6 +3,7 @@
 import Button from "@/components/common/Button";
 import PATHS from "@/config/routing/paths";
 import useNavigation from "@/hooks/useNavigation";
+import Link from "next/link";
 import RegisterPageNavigationButtons from "./RegisterPageNavigationButtons";
 
 const { REGISTER, LOGIN } = PATHS;
@@ -16,7 +17,7 @@ const MainPageNavigationButtons = () => {
 };
 
 const Buttons = () => {
-  const { goTo, pathName } = useNavigation();
+  const { pathName } = useNavigation();
 
   switch (pathName) {
     case REGISTER:
@@ -26,16 +27,16 @@ const Buttons = () => {
     default:
       return (
         <>
-          <Button onClick={() => goTo(LOGIN)} mode={"secondary"} size={"small"}>
-            Ingresar
-          </Button>
-          <Button
-            onClick={() => goTo(REGISTER)}
-            mode={"secondary"}
-            size={"small"}
-          >
-            Crear cuenta
-          </Button>
+          <Link href={LOGIN}>
+            <Button mode={"secondary"} size={"small"}>
+              Ingresar
+            </Button>
+          </Link>
+          <Link href={REGISTER}>
+            <Button mode={"secondary"} size={"small"}>
+              Crear cuenta
+            </Button>
+          </Link>
         </>
       );
       break;
