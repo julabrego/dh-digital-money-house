@@ -14,16 +14,18 @@ const NewCardPage = async () => {
   return (
     <HeadersContextProvider userId={userId} token={token} accountId={accountId}>
       <NewCardContextProvider>
-        <main className="main-panel w-full h-full flex flex-col gap-[16px] bg-[#eeeaea] p-[16px]">
-          <Breadcrumbs title="Tarjetas" />
+        <main className="main-panel items-center w-full h-full flex flex-col gap-[16px] bg-[#eeeaea] p-[16px]">
+          <div className="w-full">
+            <Breadcrumbs title="Tarjetas" />
+          </div>
 
           <Card
             mode="white"
-            className="card-form flex flex-col items-center pt-[22px] pb-[22px]"
+            className="card-form w-full max-w-[973px] flex flex-col items-center pt-[22px] pb-[22px]"
           >
             <CardDrawing />
 
-            <section className="w-full flex flex-col items-center">
+            <section className="w-full   flex flex-col items-center">
               <CardForm />
             </section>
           </Card>

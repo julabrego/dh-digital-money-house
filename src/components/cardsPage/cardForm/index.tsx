@@ -105,7 +105,12 @@ export const CardForm = () => {
             name="cvv"
             placeholder="Código de seguridad*"
           />
-          <Button mode="primary" type="submit" className="mt-[16px]">
+          <Button
+            mode="primary"
+            type="submit"
+            className="mt-[16px]"
+            disabled={isLoading || errorMessages.length > 0}
+          >
             Continuar
           </Button>
         </FormProvider>
