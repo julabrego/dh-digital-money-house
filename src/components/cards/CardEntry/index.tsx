@@ -1,17 +1,18 @@
 import StatusCircle from "@/components/common/StatusCircle";
 
 type CardEntryProps = {
-  id: number; 
+  id: number;
   status: "success" | "pending" | "failed";
   number: number;
+  handleDelete: (id: number) => Promise<void>;
 };
 
-const CardEntry = ({ id, status = "success", number }: CardEntryProps) => {
-
-  const handleDelete = () => {
-    console.log("Eliminar tarjeta", id)
-  }
-
+const CardEntry = ({
+  handleDelete,
+  id,
+  status = "success",
+  number,
+}: CardEntryProps) => {
   return (
     <article className="border-b-1 border-y-gray-400 py-[16px] flex flex-row gap-[12px] items-center">
       <StatusCircle status={status} />
@@ -19,7 +20,12 @@ const CardEntry = ({ id, status = "success", number }: CardEntryProps) => {
         Terminada en {String(number).slice(-4)}
       </div>
       <div className="flex flex-col">
-        <div className="text-[14px] text-right font-bold cursor-pointer" onClick={handleDelete}>Eliminar</div>
+        <div
+          className="text-[14px] text-right font-bold cursor-pointer"
+          onClick={() => handleDelete(id)}
+        >
+          Eliminar
+        </div>
       </div>
     </article>
   );

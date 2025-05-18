@@ -19,6 +19,9 @@ class CardsAPI {
 
   createCard = async (card: CreateCardParams, authData: AuthRequestParams): Promise<Card> =>
     httpExternalAPI.httpPost(`/api/accounts/${authData.accountId}/cards`, card, authData.token);
+
+  deleteCard = async (id: string, authData: AuthRequestParams): Promise<void> =>
+    httpExternalAPI.httpDelete(`/api/accounts/${authData.accountId}/cards/${id}`, authData.token);
 }
 
 const cardsApi = new CardsAPI();

@@ -30,31 +30,41 @@ const CardsPage = async () => {
               </Typography>
             </article>
 
-            <Link href="/cards/new">
+            {cards.length < 10 ? (
+              <Link href="/cards/new">
+                <article className="grid grid-cols-[1fr_min-content]">
+                  <div className="w-full flex flex-row gap-[16px] items-center">
+                    <Image
+                      src="images/plus-circle-green.svg"
+                      alt="Nueva tarjeta"
+                      width={33}
+                      height={33}
+                      className="w-[33px] h-[33px]"
+                    />
+                    <Typography type={"heading3"} className="text-primary">
+                      Agregar tarjeta
+                    </Typography>
+                  </div>
+                  <div className="flex flex-row w-[18px] h-full items-center">
+                    <Image
+                      src="images/right-arrow-green.svg"
+                      alt="Nueva tarjeta"
+                      width={18}
+                      height={18}
+                      className="w-[18px] h-[18px]"
+                    />
+                  </div>
+                </article>
+              </Link>
+            ) : (
               <article className="grid grid-cols-[1fr_min-content]">
                 <div className="w-full flex flex-row gap-[16px] items-center">
-                  <Image
-                    src="images/plus-circle-green.svg"
-                    alt="Nueva tarjeta"
-                    width={33}
-                    height={33}
-                    className="w-[33px] h-[33px]"
-                  />
                   <Typography type={"heading3"} className="text-primary">
-                    Agregar tarjeta
+                    Has alcanzado el límite de tarjetas
                   </Typography>
                 </div>
-                <div className="flex flex-row w-[18px] h-full items-center">
-                  <Image
-                    src="images/right-arrow-green.svg"
-                    alt="Nueva tarjeta"
-                    width={18}
-                    height={18}
-                    className="w-[18px] h-[18px]"
-                  />
-                </div>
               </article>
-            </Link>
+            )}
           </Card>
         </section>
 

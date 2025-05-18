@@ -117,6 +117,32 @@ class HttpBaseAPI {
   ): Promise<T> => {
     return this.httpPost(`${this.publicEndpointSuffix}${endpointSuffix}`, body);
   };
+
+  httpDelete = async <T>(
+    endpointSuffix: string,
+    accessToken?: string
+  ): Promise<T> => {
+    const res = await fetch(`${this.privateEndpoint}${endpointSuffix}`, {
+      method: "DELETE",
+      headers: !accessToken
+        ? { "Content-Type": "application/json" }
+        : {
+            "Content-Type": "application/json",
+            Authorization: `${accessToken}`,
+          },
+    });
+
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      if (errorResponse.error) {
+        throw new ApiError(errorResponse.error, res.status);
+      } else {
+        throw new Error("Internal Server Error");
+      }
+    }
+
+    return res.json();
+  };
 }
 
 export default HttpBaseAPI;
