@@ -7,7 +7,7 @@ import DesktopMenu from "@/components/layout/Menu/DesktopMenu";
 import MobileMenu from "@/components/layout/Menu/MobileMenu";
 import { GeneralLayoutProps } from "./types";
 import { HeadersContextProvider } from "@/contexts/headers.context";
-import { NavigationMenuContextProvider } from "@/contexts/global.context";
+import { NavigationMenuContextProvider } from "@/contexts/navigationMenu.context";
 
 const GeneralLayout = async ({ children, mode }: GeneralLayoutProps) => {
   const headers = await getHeaderValues();

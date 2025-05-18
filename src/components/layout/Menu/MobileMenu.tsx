@@ -1,6 +1,6 @@
 "use client";
 
-import { useNavigationMenuContext } from "@/contexts/global.context";
+import { useNavigationMenuContext } from "@/contexts/navigationMenu.context";
 import Image from "next/image";
 import MenuItems from "./MenuItems";
 import Link from "next/link";

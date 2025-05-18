@@ -1,27 +1,24 @@
 import { AuthRequestParams } from "@/types/auth.types";
-import { Card } from "@/types/card.types";
+import { Card, CreateCardParams } from "@/types/card.types";
 import httpExternalAPI from "../common/http.external.service";
 
 class CardsAPI {
-  getCards = async ({
-    accountId,
-    token,
-  }: AuthRequestParams): Promise<Card[]> =>
+  getCards = async ({ accountId, token }: AuthRequestParams): Promise<Card[]> =>
     httpExternalAPI.httpGet(
       `/api/accounts/${accountId}/cards`,
       undefined,
       token
     );
 
-  getCard = async (
-    id: string,
-    authData: AuthRequestParams
-  ): Promise<Card> =>
+  getCard = async (id: string, authData: AuthRequestParams): Promise<Card> =>
     httpExternalAPI.httpGet(
       `/api/accounts/${authData.accountId}/cards/${id}`,
       undefined,
       authData.token
     );
+
+  createCard = async (card: CreateCardParams, authData: AuthRequestParams): Promise<Card> =>
+    httpExternalAPI.httpPost(`/api/accounts/${authData.accountId}/cards`, card, authData.token);
 }
 
 const cardsApi = new CardsAPI();

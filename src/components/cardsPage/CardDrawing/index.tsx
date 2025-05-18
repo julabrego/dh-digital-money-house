@@ -1,18 +1,14 @@
+"use client";
 import { splitEveryFour } from "@/app/utils/string-utils";
+import { useNewCardContext } from "@/contexts/newCard.context";
 
-type CardDrawingProps = {
-  numberId?: number;
-  name?: string;
-  expirationDate?: string;
-};
+export const CardDrawing = () => {
+  const { newCardContextState } = useNewCardContext();
+  const { cardHolderName, numberId, expirationDate, cvv } = newCardContextState;
 
-export const CardDrawing = ({
-  numberId,
-  name,
-  expirationDate,
-}: CardDrawingProps) => {
-    
-  const fragmentedNumberId = splitEveryFour(String(numberId ?? "").padEnd(16, "*"));
+  const fragmentedNumberId = splitEveryFour(
+    String(numberId ?? "").padEnd(16, "*")
+  );
 
   return (
     <div className="bg-[#EEEAEA] rounded-[8px] w-[301px] h-[174px] shadow-md relative">
@@ -27,7 +23,9 @@ export const CardDrawing = ({
         </div>
         <div className="flex justify-between w-[262px]">
           <div className="text-[14px] uppercase">
-            {name ? name.slice(0, 20) : "Nombre del titular"}
+            {cardHolderName
+              ? cardHolderName.slice(0, 20)
+              : "Nombre del titular"}
           </div>
           <div className="text-[14px]">
             {expirationDate ? expirationDate : "MM/YY"}

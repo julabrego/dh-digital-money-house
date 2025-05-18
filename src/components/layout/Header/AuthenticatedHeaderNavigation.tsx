@@ -1,7 +1,7 @@
 "use client";
 
 import PATHS from "@/config/routing/paths";
-import { useNavigationMenuContext } from "@/contexts/global.context";
+import { useNavigationMenuContext } from "@/contexts/navigationMenu.context";
 import Image from "next/image";
 import Link from "next/link";
 

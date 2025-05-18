@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { MenuItemProps } from "./types";
-import { useNavigationMenuContext } from "@/contexts/global.context";
+import { useNavigationMenuContext } from "@/contexts/navigationMenu.context";
 
 const MenuItem = ({
   label,

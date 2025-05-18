@@ -7,4 +7,9 @@ export type Card = {
   number_id: number;
 };
 
-
+export type CreateCardParams = {
+  cod: number;
+  expiration_date: string;
+  first_last_name: string;
+  number_id: number;
+};
