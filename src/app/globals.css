@@ -207,6 +207,16 @@ input[disabled] {
   @apply gap-y-[36px];
 }
 
+.card-form .form-container .fields-container {
+  @apply mt-[30px];
+  @apply gap-[20px];
+}
+
+.card-form .form-container .fields-container input{
+  @apply border-1;
+  @apply border-[#D2FFEC];
+}
+
 .form-container .fields-container.register-form {
   @apply md:grid;
   @apply md:grid-cols-2;
@@ -243,7 +253,6 @@ input[disabled] {
   @apply p-0;
   @apply text-[16px];
 }
-
 
 .account-data-container input {
   @apply w-full;
