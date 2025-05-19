@@ -5,13 +5,14 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 import MainContainer from "@/components/common/MainContainer";
 import TextInput from "@/components/common/TextInput";
 import PATHS from "@/config/routing/paths";
-import { useGlobalContext } from "@/contexts/global.context";
 import {
   LoginContextProvider,
   useLoginContext,
 } from "@/contexts/login.context";
+import useNavigation from "@/hooks/useNavigation";
 
 import LoginSchema from "@/schemas/login.schema";
+import authAPI from "@/services/auth/auth.api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -107,14 +108,10 @@ const StepOne = () => {
 };
 
 const StepTwo = () => {
-  const router = useRouter();
-  const {
-    serviceProvider: { authService }, setUserToken
-  } = useGlobalContext();
+  const { email } = useLoginContext();
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { email } = useLoginContext();
+  const { goTo } = useNavigation();
   const methods = useForm<{ email: string; password: string }>({
     resolver: yupResolver(LoginSchema.password),
   });
@@ -139,11 +136,9 @@ const StepTwo = () => {
       if (email && password) {
         setIsLoading(true);
 
-        const token = await authService.login(email, password);
-        setUserToken(token?.token);
+        await authAPI.login(email, password);
 
-        router.push("/");
-        router.refresh();
+        goTo(PATHS.HOME);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -151,7 +146,7 @@ const StepTwo = () => {
       } else {
         setServerError("Ocurrió un error inesperado");
       }
-    } finally {
+
       setIsLoading(false);
     }
   };

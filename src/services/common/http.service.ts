@@ -1,4 +1,4 @@
-import { AccessDeniedError, ApiError } from "./http.errors";
+import { ApiError } from "./http.errors";
 
 class HttpBaseAPI {
   protected privateEndpoint: string;
@@ -14,6 +14,9 @@ class HttpBaseAPI {
     params?: URLSearchParams,
     accessToken?: string
   ): Promise<T> {
+    console.log(
+      `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`
+    );
     const res = await fetch(
       `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`,
       {
@@ -22,13 +25,13 @@ class HttpBaseAPI {
           ? { "Content-Type": "application/json" }
           : {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: accessToken,
             },
       }
     );
 
     if (!res.ok) {
-      console.log(`${res.status} ${res.statusText} ${accessToken}`);
+      console.error(`${res.status} ${res.statusText} ${accessToken}`);
       throw new Error("Failed to retrieve: " + endpointSuffix);
     }
 
@@ -56,23 +59,18 @@ class HttpBaseAPI {
         ? { "Content-Type": "application/json" }
         : {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `${accessToken}`,
           },
       body: JSON.stringify(body),
     });
 
     if (!res.ok) {
-      if (res.status === 403) {
-        throw new AccessDeniedError("User has no access");
+      const errorResponse = await res.json();
+      if (errorResponse.error) {
+        throw new ApiError(errorResponse.error, res.status);
+      } else {
+        throw new Error("Internal Server Error");
       }
-
-      const { error } = await res.json();
-
-      if (error) {
-        throw new ApiError(error);
-      }
-
-      throw new Error("Failed to post: " + endpointSuffix);
     }
 
     return res.json();
@@ -83,6 +81,67 @@ class HttpBaseAPI {
     body: object
   ): Promise<T> => {
     return this.httpPost(`${this.publicEndpointSuffix}${endpointSuffix}`, body);
+  };
+
+  httpPatch = async <T>(
+    endpointSuffix: string,
+    body: object,
+    accessToken?: string
+  ): Promise<T> => {
+    const res = await fetch(`${this.privateEndpoint}${endpointSuffix}`, {
+      method: "PATCH",
+      headers: !accessToken
+        ? { "Content-Type": "application/json" }
+        : {
+            "Content-Type": "application/json",
+            Authorization: `${accessToken}`,
+          },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      if (errorResponse.error) {
+        throw new ApiError(errorResponse.error, res.status);
+      } else {
+        throw new Error("Internal Server Error");
+      }
+    }
+
+    return res.json();
+  };
+
+  httpPatchPublic = async <T>(
+    endpointSuffix: string,
+    body: object
+  ): Promise<T> => {
+    return this.httpPost(`${this.publicEndpointSuffix}${endpointSuffix}`, body);
+  };
+
+  httpDelete = async <T>(
+    endpointSuffix: string,
+    accessToken?: string
+  ): Promise<T> => {
+    const res = await fetch(`${this.privateEndpoint}${endpointSuffix}`, {
+      method: "DELETE",
+      headers: !accessToken
+        ? { "Content-Type": "application/json" }
+        : {
+            "Content-Type": "application/json",
+            Authorization: `${accessToken}`,
+          },
+    });
+
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      if (errorResponse.error) {
+        throw new ApiError(errorResponse.error, res.status);
+      } else {
+        throw new Error("Internal Server Error");
+      }
+    }
+
+    return res.json();
   };
 }
 

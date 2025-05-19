@@ -1,9 +1,11 @@
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-
 const TextInput = ({ name, defaultValue, ...props }: TextInputProps) => {
-  const { control, formState: {errors} } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
   return (
     <Controller
       name={name}
@@ -35,4 +37,3 @@ type TextInputProps = React.DetailedHTMLProps<
 };
 
 export default TextInput;
-

@@ -1,24 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #201F22;
-  --foreground: #FFFFFF;
+  --background: #201f22;
+  --foreground: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-open-sans: var(--font-open-sans);
-  --color-primary: #C1FD35;
-  --color-secondary: #3A393E;
-  --color-tertiary: #CECECE;
-  --color-error: #DA0000;
+  --color-primary: #c1fd35;
+  --color-secondary: #3a393e;
+  --color-tertiary: #cecece;
+  --color-success: #c1fd35;
+  --color-warning: #ffcc00;
+  --color-error: #da0000;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+body * {
   @apply font-[Open_Sans];
 }
 
@@ -36,6 +41,45 @@ button[disabled] {
 
 button:hover {
   @apply cursor-pointer;
+}
+
+h1.heading1 {
+  @apply text-[24pt];
+  @apply font-bold;
+}
+h2.heading2 {
+  @apply text-[20pt];
+  @apply font-bold;
+}
+h3.heading3 {
+  @apply text-[16pt];
+  @apply font-bold;
+}
+h4.heading4 {
+  @apply text-[14pt];
+  @apply font-bold;
+}
+h5.heading5 {
+  @apply text-[13pt];
+  @apply font-bold;
+}
+h6.heading6 {
+  @apply text-[12pt];
+  @apply font-bold;
+}
+
+span.text1 {
+  @apply text-[14pt];
+  @apply font-medium;
+}
+span.text2 {
+  @apply text-[12pt];
+  @apply font-medium;
+}
+span.error {
+  @apply text-[14pt];
+  @apply font-medium;
+  @apply text-error;
 }
 
 .button-small {
@@ -56,6 +100,11 @@ button:hover {
   @apply text-[18px];
 }
 
+.button-xlarge {
+  @apply px-[16px];
+  @apply py-6;
+}
+
 .button-primary {
   @apply bg-primary;
   @apply text-secondary;
@@ -67,6 +116,20 @@ button:hover {
 
 .button-primary:active {
   @apply bg-primary;
+  @apply outline-none;
+}
+
+.light-container .button-primary {
+  @apply bg-background;
+  @apply text-white;
+}
+
+.light-container .button-primary:hover {
+  @apply bg-gray-600;
+}
+
+.light-container .button-primary:active {
+  @apply bg-black;
   @apply outline-none;
 }
 
@@ -144,6 +207,16 @@ input[disabled] {
   @apply gap-y-[36px];
 }
 
+.card-form .form-container .fields-container {
+  @apply mt-[30px];
+  @apply gap-[20px];
+}
+
+.card-form .form-container .fields-container input{
+  @apply border-1;
+  @apply border-[#D2FFEC];
+}
+
 .form-container .fields-container.register-form {
   @apply md:grid;
   @apply md:grid-cols-2;
@@ -157,4 +230,38 @@ input[disabled] {
   @apply text-[15px];
   @apply text-error;
   @apply italic;
+}
+
+.main-panel section {
+  @apply w-full;
+}
+
+.main-panel section button,
+.main-panel section input {
+  @apply shadow-md;
+  @apply w-full;
+}
+
+.main-panel section .profile-data input {
+  @apply w-full;
+  @apply bg-white;
+  @apply text-black;
+  @apply border-0;
+  @apply rounded-none;
+  @apply outline-none;
+  @apply shadow-none;
+  @apply p-0;
+  @apply text-[16px];
+}
+
+.account-data-container input {
+  @apply w-full;
+  @apply bg-black;
+  @apply text-white;
+  @apply border-0;
+  @apply rounded-none;
+  @apply outline-none;
+  @apply shadow-none;
+  @apply p-0;
+  @apply text-[16px];
 }

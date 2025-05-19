@@ -1,16 +1,14 @@
 import { User } from "@/types/user.types";
-import httpInternalAPI from "../common/http.internal.service";
+import httpExternalAPI from "../common/http.external.service";
 
-export default class UserAPI {
-  private _userToken: string | undefined;
+ class UserAPI {
+  getUsers = async (token: string): Promise<User[]> =>
+    httpExternalAPI.httpGet(`/api/users`, undefined, token);
 
-  constructor(userToken?: string) {
-    this._userToken = userToken;
-  }
-
-  getUsers = async (): Promise<User[]> =>
-    httpInternalAPI.httpGet(`/users`, undefined, this._userToken);
-
-  getUser = async (id: string): Promise<User> =>
-    httpInternalAPI.httpGet(`/users/${id}`, undefined, this._userToken);
+  getUser = async (id: string, token: string): Promise<User> =>
+    httpExternalAPI.httpGet(`/api/users/${id}`, undefined, token);
 }
+
+const userApi = new UserAPI();
+
+export default userApi;

@@ -20,7 +20,7 @@ type ButtonProps = React.DetailedHTMLProps<
   HTMLButtonElement
 > & {
   mode?: "primary" | "secondary" | "tertiary";
-  size?: "small" | "medium" | "large";
+  size?: "small" | "medium" | "large" | "xlarge";
 };
 
 export default Button;

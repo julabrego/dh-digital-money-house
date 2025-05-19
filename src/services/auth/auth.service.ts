@@ -1,17 +1,27 @@
+import { Account } from "@/types/accout.types";
 import {
   LoginResponseType,
   RegisterUserResponseType,
 } from "@/types/auth.types";
-import authAPI from "./auth.api";
 import { User } from "@/types/user.types";
+import authAPI from "./auth.api";
 
-export default class AuthService {
-  async login(email: string, password: string): Promise<LoginResponseType> {
-    const token = await authAPI.login(email, password);
-    if (token) {
-      localStorage.setItem("token", token.token);
-    }
-    return token;
+class AuthService {
+  async authenticate(
+    email: string,
+    password: string
+  ): Promise<LoginResponseType> {
+    const loginResponse = await authAPI.authenticate(email, password);
+    const expiresAt = await this.getSessionExpirationtime();
+
+    return {
+      token: loginResponse.token,
+      expiresAt,
+    };
+  }
+
+  async getAccountInfo(token: string): Promise<Account> {
+    return await authAPI.getAccountInfo(token);
   }
 
   async register({
@@ -32,7 +42,46 @@ export default class AuthService {
     });
   }
 
-  async logout(): Promise<void> {
-    await authAPI.logout();
+  async update(
+    userId: string,
+    { dni, email, firstname, lastname, password, phone }: Partial<User>,
+    accessToken: string
+  ): Promise<User> {
+    return await authAPI.update(
+      userId,
+      {
+        dni,
+        email,
+        firstname,
+        lastname,
+        password,
+        phone,
+      },
+      accessToken
+    );
+  }
+
+  async updateAccount(
+    userId: string,
+    { alias, cvu }: Partial<Account>,
+    accessToken: string
+  ): Promise<Account> {
+    return await authAPI.updateAccount(
+      userId,
+      {
+        alias,
+        cvu,
+      },
+      accessToken
+    );
+  }
+
+  async getSessionExpirationtime() {
+    const now = new Date();
+    return new Date(now.getTime() + 60 * 6000 * 1000).getTime();
   }
 }
+
+const authService = new AuthService();
+
+export default authService;
