@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { User } from "@/types/auth.types";
+import { User } from "@/types/user.types";
 import {
   createContext,
   Dispatch,
@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-type RegisterContext = User
+type RegisterContext = User;
 
 const RegisterContext = createContext<RegisterContextType | undefined>(
   undefined
@@ -29,7 +29,7 @@ const RegisterContextProvider = ({
       password: "",
       phone: "",
     });
-    
+
   const value = {
     ...registerContextState,
     setRegisterContextState,
@@ -57,4 +57,3 @@ const useRegisterContext = () => {
 };
 
 export { RegisterContextProvider, useRegisterContext };
-
