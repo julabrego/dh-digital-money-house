@@ -118,7 +118,7 @@ const DataRow = ({ label, fieldName, value, readOnly }: DataRowProps) => {
             width={24}
             height={24}
             className="w-[24px] h-[24px] cursor-pointer"
-            onClick={() => handleCopy(value)}
+            onClick={() => handleCopy(internalValue)}
           />
         </>
       </div>
