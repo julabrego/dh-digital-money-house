@@ -12,8 +12,6 @@ export async function middleware(request: NextRequest) {
   const userId = cookieStore.get("user-id")?.value ?? "";
   const accountId = cookieStore.get("account-id")?.value ?? "";
 
-  console.log({ sessionId, userId, accountId });
-
   const pathname = request.nextUrl.pathname;
 
   try {
@@ -73,5 +71,5 @@ const setAuthenticationHeaders = (
 };
 
 export const config = {
-  matcher: ["/", "/home:path*", "/profile", "/login", "/register", "/cards/:path*"],
+  matcher: ["/", "/home:path*", "/profile", "/login", "/register", "/cards/:path*", "/activity"],
 };

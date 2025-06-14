@@ -12,7 +12,7 @@ export type MenuItemProps = {
   onClick?: () => void;
 };
 
-const { HOME, TRANSACTION_LOG: ACTIVITY_LOG, PROFILE, CHARGE_MONEY, PAY_SERVICES, CARDS } =
+const { HOME, ACTIVITY: ACTIVITY_LOG, PROFILE, CHARGE_MONEY, PAY_SERVICES, CARDS } =
   PATHS;
 
 export const MENU_ITEMS = [

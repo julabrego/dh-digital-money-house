@@ -67,7 +67,7 @@ const HomePage = async () => {
 
           <TransactionLogs transactions={transactions || []} limit={10} />
 
-          <CardFooter footerClickPath={PATHS.TRANSACTION_LOG}>
+          <CardFooter footerClickPath={PATHS.ACTIVITY}>
             Ver toda tu actividad
           </CardFooter>
         </Card>
