@@ -7,21 +7,30 @@ type TransactionLogsProps = {
   transactions: Transaction[];
   limit?: number;
   paginate?: boolean;
+  search: string;
 };
 
 const TransactionLogs = ({
   transactions,
   limit,
   paginate,
+  search,
 }: TransactionLogsProps) => {
   const [page, setPage] = useState(1);
 
-  const limitedTransactions = transactions
-    .slice((page - 1) * (limit || transactions.length), page * (limit || transactions.length))
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.description.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const limitedTransactions = filteredTransactions
+    .slice(
+      (page - 1) * (limit || transactions.length),
+      page * (limit || transactions.length)
+    )
     .sort((a, b) => new Date(b.dated).getTime() - new Date(a.dated).getTime());
 
   const totalPages = Math.ceil(
-    transactions.length / (limit || transactions.length)
+    filteredTransactions.length / (limit || filteredTransactions.length)
   );
 
   const handlePageChange = (page: number) => {
