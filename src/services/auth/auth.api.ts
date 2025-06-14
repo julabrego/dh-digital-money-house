@@ -28,7 +28,7 @@ class AuthAPI {
     password,
     phone,
   }: User): Promise<RegisterUserResponseType> =>
-    httpInternalAPI.httpPostPublic(`/users`, {
+    httpExternalAPI.httpPostPublic(`/users`, {
       dni,
       email,
       firstname,
