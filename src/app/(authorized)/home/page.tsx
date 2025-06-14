@@ -1,3 +1,4 @@
+import { formatArgentinePesos } from "@/app/utils/number-utils";
 import TransactionLogs from "@/components/activityLog/TransactionLogs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Button from "@/components/common/Button";
@@ -7,6 +8,7 @@ import CardFooter from "@/components/common/CardFooter";
 import CardHeader from "@/components/common/CardHeader";
 import SearchInput from "@/components/SearchInput";
 import PATHS from "@/config/routing/paths";
+import authAPI from "@/services/auth/auth.api";
 import transactionApi from "@/services/transaction/transaction.api";
 import { headers } from "next/headers";
 
@@ -14,7 +16,9 @@ const HomePage = async () => {
   const token = (await headers()).get("x-access-token") ?? null;
   const accountId = (await headers()).get("x-account-id") ?? null;
 
-  console.log({token, accountId})
+  const accountData =
+    accountId && token ? await authAPI.getAccountInfo(token) : null;
+
   const transactions =
     accountId && token
       ? await transactionApi.getTransactions({ accountId, token })
@@ -36,7 +40,10 @@ const HomePage = async () => {
           </div>
           <p className="text-[16px] mb-[8px]">Dinero disponible</p>
           <div className="px-[16px] py-[8px] border border-primary rounded-[100px] w-fit min-w-[100px] text-center">
-            <p className="text-[24px] font-semibold">$6.890.534,17</p>
+            <p className="text-[24px] font-semibold">
+              {accountData &&
+                `${formatArgentinePesos(accountData.available_amount)}`}
+            </p>
           </div>
         </Card>
       </section>
