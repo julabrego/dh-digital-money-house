@@ -14,7 +14,7 @@ const TransactionLogs = ({
   transactions,
   limit,
   paginate,
-  search,
+  search = "",
 }: TransactionLogsProps) => {
   const [page, setPage] = useState(1);
 
