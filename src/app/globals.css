@@ -265,3 +265,7 @@ input[disabled] {
   @apply p-0;
   @apply text-[16px];
 }
+
+.filter-selector input[type="radio"]{
+  @apply shadow-none;
+}

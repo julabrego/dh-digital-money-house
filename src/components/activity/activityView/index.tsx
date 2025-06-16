@@ -21,6 +21,7 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
   const methods = useForm<{ search: string }>({});
 
   const handleFilterChange = (value: string | null) => {
+    setShowFilters(false);
     setSelectedFilter(value);
   };
 
@@ -72,33 +73,56 @@ const Filters = ({
   selectedFilter: string | null;
   onFilterChange: (value: string | null) => void;
 }) => {
+  const [internalFilter, setInternalFilter] = useState<string | null>(
+    selectedFilter
+  );
+
+  const onSelectFilter = (value: string | null) => {
+    setInternalFilter(value);
+  };
+
+  const handleApplyFilter = () => {
+    onFilterChange(internalFilter);
+  };
+
   return (
-    <div className="absolute right-0 text-[#777575] bg-[#EEEAEA] w-[300px]">
+    <div className="filter-selector absolute right-0 text-[#777575] bg-[#EEEAEA] w-[300px]">
       <header className="grid grid-cols-2 border-b-1 border-b-black px-[16px] py-[8px]">
         <Typography type={"heading6"} className="text-black">
           Período
         </Typography>
         <p
-          onClick={() => onFilterChange(null)}
+          onClick={() => onSelectFilter(null)}
           className="text-right cursor-pointer"
         >
           Borrar filtros
         </p>
       </header>
 
-      <section className="grid grid-cols-[1fr_min-content] px-[16px] py-[8px]">
+      <section className="grid grid-cols-[1fr_min-content] px-[16px] py-[8px] gap-[8px]">
         {filters.map((filter) => (
           <div
-            onClick={() => onFilterChange(filter.value)}
+            onClick={() => onSelectFilter(filter.value)}
             key={`filter-${filter.value}`}
             className="contents  cursor-pointer"
           >
             <div>{filter.name}</div>
             <div>
-              <input readOnly checked={filter.value === selectedFilter} type="radio" />
+              <input
+                readOnly
+                checked={filter.value === internalFilter}
+                type="radio"
+              />
             </div>
           </div>
         ))}
+        <Button
+          onClick={handleApplyFilter}
+          size="small"
+          className="col-span-2 w-full"
+        >
+          Aplicar
+        </Button>
       </section>
     </div>
   );
@@ -128,10 +152,6 @@ const filters = [
   {
     name: "Último año",
     value: "lastYear",
-  },
-  {
-    name: "Otro período",
-    value: "custom",
   },
 ];
 
