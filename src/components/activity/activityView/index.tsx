@@ -16,7 +16,13 @@ type ActivityViewProps = {
 
 const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+
   const methods = useForm<{ search: string }>({});
+
+  const handleFilterChange = (value: string | null) => {
+    setSelectedFilter(value);
+  };
 
   const { watch, register } = methods;
 
@@ -34,7 +40,12 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
           >
             Filtrar
           </Button>
-          {showFilters && <Filters />}
+          {showFilters && (
+            <Filters
+              selectedFilter={selectedFilter}
+              onFilterChange={handleFilterChange}
+            />
+          )}
         </div>
       </section>
       <section className="activity_log flex flex-col gap-[16px]">
@@ -44,6 +55,7 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
           <TransactionLogs
             transactions={transactions || []}
             limit={limit}
+            filter={selectedFilter}
             paginate
             search={searchValue}
           />
@@ -53,20 +65,37 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
   );
 };
 
-const Filters = () => {
+const Filters = ({
+  selectedFilter,
+  onFilterChange,
+}: {
+  selectedFilter: string | null;
+  onFilterChange: (value: string | null) => void;
+}) => {
   return (
     <div className="absolute right-0 text-[#777575] bg-[#EEEAEA] w-[300px]">
       <header className="grid grid-cols-2 border-b-1 border-b-black px-[16px] py-[8px]">
-        <Typography type={"heading6"} className="text-black">Período</Typography>
-        <p className="text-right">Borrar filtros</p>
+        <Typography type={"heading6"} className="text-black">
+          Período
+        </Typography>
+        <p
+          onClick={() => onFilterChange(null)}
+          className="text-right cursor-pointer"
+        >
+          Borrar filtros
+        </p>
       </header>
 
       <section className="grid grid-cols-[1fr_min-content] px-[16px] py-[8px]">
         {filters.map((filter) => (
-          <div key={`filter-${filter.value}`} className="contents">
+          <div
+            onClick={() => onFilterChange(filter.value)}
+            key={`filter-${filter.value}`}
+            className="contents  cursor-pointer"
+          >
             <div>{filter.name}</div>
             <div>
-              <input type="radio" />
+              <input readOnly checked={filter.value === selectedFilter} type="radio" />
             </div>
           </div>
         ))}
