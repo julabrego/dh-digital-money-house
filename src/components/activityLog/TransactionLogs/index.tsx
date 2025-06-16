@@ -47,6 +47,7 @@ const TransactionLogs = ({
       {limitedTransactions.map((transaction) => (
         <TransactionLogEntry
           key={transaction.id}
+          id={transaction.id}
           status={"success"}
           description={transaction.description}
           amount={transaction.amount}

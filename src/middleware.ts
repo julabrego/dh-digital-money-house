@@ -71,5 +71,5 @@ const setAuthenticationHeaders = (
 };
 
 export const config = {
-  matcher: ["/", "/home:path*", "/profile", "/login", "/register", "/cards/:path*", "/activity"],
+  matcher: ["/", "/home:path*", "/profile", "/login", "/register", "/cards/:path*", "/activity/:path*"],
 };
