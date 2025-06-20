@@ -3,11 +3,14 @@ const PATHS = {
   REGISTER: "/register",
   MAIN: "/",
   HOME: "/home",
-  TRANSACTION_LOG: "/transaction-log",
+  ACTIVITY: "/activity",
   PROFILE: "/profile",
   CHARGE_MONEY: "/charge-money",
+  CHARGE_MONEY_TRANSFER: "/charge-money/transfer",
+  CHARGE_MONEY_CARD: "/charge-money/card",
   PAY_SERVICES: "/pay-services",
   CARDS: "/cards",
+  CARDS_NEW: "/cards/new",
   LOGOUT: "/logout",
 } as const;
 

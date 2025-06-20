@@ -1,0 +1,59 @@
+import { Account } from "@/types/accout.types";
+import { Card as CardType } from "@/types/card.types";
+import React, { PropsWithChildren, useContext } from "react";
+
+type ChargeMoneyContextValue = PropsWithChildren & {
+  accountData: (Account & { token: string }) | null;
+  amount: number;
+  setAmount: (amount: number) => void;
+  cards: CardType[];
+  step: number;
+  goToNextStep: () => void;
+  goToPrevStep: () => void;
+  selectedCard: number | null;
+};
+
+const ChargeMoneyContext = React.createContext<ChargeMoneyContextValue | null>(
+  null
+);
+
+const ChargeMoneyContextProvider = ({
+  accountData,
+  children,
+  amount,
+  setAmount,
+  cards,
+  step,
+  goToNextStep,
+  goToPrevStep,
+  selectedCard,
+}: ChargeMoneyContextValue) => {
+  return (
+    <ChargeMoneyContext.Provider
+      value={{
+        accountData,
+        amount,
+        setAmount,
+        cards,
+        step,
+        goToNextStep,
+        goToPrevStep,
+        selectedCard,
+      }}
+    >
+      {children}
+    </ChargeMoneyContext.Provider>
+  );
+};
+
+const useChargeMoneyContext = () => {
+  const context = useContext(ChargeMoneyContext);
+  if (!context) {
+    throw new Error(
+      "useChargeMoneyContext must be used within a ChargeMoneyContextProvider"
+    );
+  }
+  return context;
+};
+
+export { ChargeMoneyContextProvider, useChargeMoneyContext };
