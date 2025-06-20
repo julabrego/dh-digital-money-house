@@ -8,10 +8,13 @@ import {
     ChargeMoneyContextProvider,
     useChargeMoneyContext,
 } from "@/contexts/chargeMoney.context";
+import { useHeadersContext } from "@/contexts/headers.context";
+import authAPI from "@/services/auth/auth.api";
+import { Account } from "@/types/accout.types";
 import { Card as CardType } from "@/types/card.types";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type ChargeMoneyCardViewProps = {
   cards: CardType[];
 };
@@ -24,6 +27,8 @@ const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
   const handleSelectCard = (id: number) => setSelectedCard(id);
 
   const goToNextStep = () => setStep(step + 1);
+
+  const goToPrevStep = () => setStep(step - 1);
 
   let stepComponent = null;
 
@@ -58,6 +63,7 @@ const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
       cards={cards}
       step={step}
       goToNextStep={goToNextStep}
+      goToPrevStep={goToPrevStep}
       selectedCard={selectedCard}
     >
       {stepComponent}
@@ -162,11 +168,60 @@ const ChargeWithCardStep2 = () => {
 };
 
 const ChargeWithCardStep3 = () => {
+  const { goToPrevStep, goToNextStep, amount } = useChargeMoneyContext();
+
+  const [accountData, setAccountData] = useState<Account | null>(null);
+
+  const { token } = useHeadersContext();
+
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      const accountData = token ? await authAPI.getAccountInfo(token) : null;
+      setAccountData(accountData);
+    };
+
+    fetchAccountData();
+    return () => {
+      setAccountData(null);
+    };
+  }, []);
+
   return (
     <Card mode="dark">
       <article className="w-full flex flex-row gap-[16px] mb-[14px]">
-        <Typography type={"heading4"}>Confirmar</Typography>
+        <Typography type={"heading4"}>Revisá que esté todo bien</Typography>
       </article>
+
+      <article className="w-full flex flex-row gap-[16px] mb-[14px] items-center">
+        <Typography type="text2">Vas a transferir</Typography>
+        <Image
+          src="/images/edit-icon.svg"
+          alt="Nueva tarjeta"
+          width={33}
+          height={33}
+          className="w-[33px] h-[33px] cursor-pointer"
+          onClick={goToPrevStep}
+        />
+      </article>
+
+      <article className="w-full flex flex-col gap-[16px] mb-[14px]">
+        <Typography type="heading4">${amount}</Typography>
+        <Typography type="text2">Para</Typography>
+        <Typography type="heading4">Cuenta propia</Typography>
+        {accountData && (
+          <>
+            <Typography type="text2">{accountData?.alias}</Typography>
+            <Typography type="text2">{accountData?.cvu}</Typography>
+          </>
+        )}
+      </article>
+
+       <div className="w-full flex flex-row justify-end items-center pt-[16px]">
+       
+        <Button mode="primary" onClick={goToNextStep}>
+          Continuar
+        </Button>
+      </div>
     </Card>
   );
 };

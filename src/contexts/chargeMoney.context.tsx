@@ -7,6 +7,7 @@ type ChargeMoneyContextValue = PropsWithChildren & {
   cards: CardType[];
   step: number;
   goToNextStep: () => void;
+  goToPrevStep: () => void;
   selectedCard: number | null;
 };
 
@@ -21,11 +22,12 @@ const ChargeMoneyContextProvider = ({
   cards,
   step,
   goToNextStep,
+  goToPrevStep,
   selectedCard,
 }: ChargeMoneyContextValue) => {
   return (
     <ChargeMoneyContext.Provider
-      value={{ amount, setAmount, cards, step, goToNextStep, selectedCard }}
+      value={{ amount, setAmount, cards, step, goToNextStep, goToPrevStep, selectedCard }}
     >
       {children}
     </ChargeMoneyContext.Provider>
