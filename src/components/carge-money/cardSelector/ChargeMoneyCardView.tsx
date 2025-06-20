@@ -4,6 +4,10 @@ import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Typography from "@/components/common/Typography";
 import PATHS from "@/config/routing/paths";
+import {
+  ChargeMoneyContextProvider,
+  useChargeMoneyContext,
+} from "@/contexts/chargeMoney.context";
 import { Card as CardType } from "@/types/card.types";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,8 +18,56 @@ type ChargeMoneyCardViewProps = {
 
 const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
+  const [step, setStep] = useState(1);
 
   const handleSelectCard = (id: number) => setSelectedCard(id);
+
+  const goToNextStep = () => setStep(step + 1);
+
+  let stepComponent = null;
+
+  switch (step) {
+    case 1:
+      stepComponent = (
+        <ChargeWithCardStep1 handleSelectCard={handleSelectCard} />
+      );
+      break;
+    case 2:
+      stepComponent = <ChargeWithCardStep2 />;
+      break;
+    case 3:
+      stepComponent = <ChargeWithCardStep3 />;
+      break;
+    case 4:
+      stepComponent = <ChargeWithCardStep4 />;
+      break;
+    default:
+      stepComponent = (
+        <Card mode="dark">
+          <Typography type={"heading4"}>Algo salió mal</Typography>
+        </Card>
+      );
+      break;
+  }
+
+  return (
+    <ChargeMoneyContextProvider
+      cards={cards}
+      step={step}
+      goToNextStep={goToNextStep}
+      selectedCard={selectedCard}
+    >
+      {stepComponent}
+    </ChargeMoneyContextProvider>
+  );
+};
+
+const ChargeWithCardStep1 = ({
+  handleSelectCard,
+}: {
+  handleSelectCard: (id: number) => void;
+}) => {
+  const { cards, selectedCard, goToNextStep } = useChargeMoneyContext();
 
   return (
     <Card mode="dark">
@@ -31,8 +83,8 @@ const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
         />
       </Card>
 
-      <Link href={PATHS.CARDS_NEW}>
-        <div className="w-full flex flex-row justify-between pt-[16px]">
+      <div className="w-full flex flex-row justify-between items-center pt-[16px]">
+        <Link href={PATHS.CARDS_NEW}>
           <div className="flex w-full flex-row gap-[16px] items-center ">
             <Image
               src="/images/plus-circle-green.svg"
@@ -45,9 +97,45 @@ const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
               Nueva tarjeta
             </Typography>
           </div>
-          <Button mode="primary" disabled={!selectedCard}>Continuar</Button>
-        </div>
-      </Link>
+        </Link>
+        <Button
+          mode="primary"
+          onClick={goToNextStep}
+          disabled={!selectedCard}
+        >
+          Continuar
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
+const ChargeWithCardStep2 = () => {
+  return (
+    <Card mode="dark">
+      <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+        <Typography type={"heading4"}>Seleccionar monto</Typography>
+      </article>
+    </Card>
+  );
+};
+
+const ChargeWithCardStep3 = () => {
+  return (
+    <Card mode="dark">
+      <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+        <Typography type={"heading4"}>Confirmar</Typography>
+      </article>
+    </Card>
+  );
+};
+
+const ChargeWithCardStep4 = () => {
+  return (
+    <Card mode="dark">
+      <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+        <Typography type={"heading4"}>Todo bien</Typography>
+      </article>
     </Card>
   );
 };
