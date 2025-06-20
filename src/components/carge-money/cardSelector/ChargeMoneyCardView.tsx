@@ -1,25 +1,31 @@
 "use client";
+import { spanishTextDate } from "@/app/utils/date";
 import CardSelector from "@/components/carge-money/cardSelector";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import Typography from "@/components/common/Typography";
 import PATHS from "@/config/routing/paths";
 import {
-    ChargeMoneyContextProvider,
-    useChargeMoneyContext,
+  ChargeMoneyContextProvider,
+  useChargeMoneyContext,
 } from "@/contexts/chargeMoney.context";
-import { useHeadersContext } from "@/contexts/headers.context";
-import authAPI from "@/services/auth/auth.api";
+import transferenceApi from "@/services/transference/transference.api";
 import { Account } from "@/types/accout.types";
 import { Card as CardType } from "@/types/card.types";
+import { Transaction } from "@/types/transaction.types";
+import { TransferenceParams } from "@/types/transference.types";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 type ChargeMoneyCardViewProps = {
   cards: CardType[];
+  accountData: (Account & { token: string }) | null;
 };
 
-const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
+const ChargeMoneyCardView = ({
+  cards,
+  accountData,
+}: ChargeMoneyCardViewProps) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [step, setStep] = useState(1);
   const [amount, setAmount] = useState(0);
@@ -58,6 +64,7 @@ const ChargeMoneyCardView = ({ cards }: ChargeMoneyCardViewProps) => {
 
   return (
     <ChargeMoneyContextProvider
+      accountData={accountData}
       amount={amount}
       setAmount={setAmount}
       cards={cards}
@@ -168,23 +175,8 @@ const ChargeWithCardStep2 = () => {
 };
 
 const ChargeWithCardStep3 = () => {
-  const { goToPrevStep, goToNextStep, amount } = useChargeMoneyContext();
-
-  const [accountData, setAccountData] = useState<Account | null>(null);
-
-  const { token } = useHeadersContext();
-
-  useEffect(() => {
-    const fetchAccountData = async () => {
-      const accountData = token ? await authAPI.getAccountInfo(token) : null;
-      setAccountData(accountData);
-    };
-
-    fetchAccountData();
-    return () => {
-      setAccountData(null);
-    };
-  }, []);
+  const { goToPrevStep, goToNextStep, amount, accountData } =
+    useChargeMoneyContext();
 
   return (
     <Card mode="dark">
@@ -216,8 +208,7 @@ const ChargeWithCardStep3 = () => {
         )}
       </article>
 
-       <div className="w-full flex flex-row justify-end items-center pt-[16px]">
-       
+      <div className="w-full flex flex-row justify-end items-center pt-[16px]">
         <Button mode="primary" onClick={goToNextStep}>
           Continuar
         </Button>
@@ -227,12 +218,112 @@ const ChargeWithCardStep3 = () => {
 };
 
 const ChargeWithCardStep4 = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { accountData, amount } = useChargeMoneyContext();
+  const [transferenceData, setTransferenceData] = useState<Transaction | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (!accountData) return;
+
+    const payload: TransferenceParams = {
+      amount,
+      origin: String(accountData.cvu),
+      destination: String(accountData.cvu),
+      dated: new Date().toISOString(),
+    };
+
+    const sendTransference = async () => {
+      try {
+        const deposit = await transferenceApi.deposit(payload, {
+          accountId: String(accountData.id),
+          token: String(accountData.token),
+        });
+
+        setTransferenceData(deposit);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("Ocurrio un error inesperado");
+        }
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    sendTransference();
+  }, []);
+
   return (
-    <Card mode="dark">
-      <article className="w-full flex flex-row gap-[16px] mb-[14px]">
-        <Typography type={"heading4"}>Todo bien</Typography>
-      </article>
-    </Card>
+    <>
+      {isLoading ? (
+        <Card mode="dark">
+          <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+            <Typography type={"heading4"}>Enviando...</Typography>
+          </article>
+        </Card>
+      ) : (
+        <>
+          {error || !transferenceData ? (
+            <Card mode="dark">
+              <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+                <Typography type={"heading4"}>Error</Typography>
+              </article>
+              <article className="w-full flex flex-row gap-[16px] mb-[14px]">
+                <Typography type={"text2"}>{error}</Typography>
+              </article>
+              <article className="w-full flex flex-row justify-end gap-[16px] mb-[14px]">
+                <Button mode="primary" onClick={() => window.location.reload()}>
+                  Reintentar
+                </Button>
+              </article>
+            </Card>
+          ) : (
+            <>
+              <Card mode="green">
+                <article className="w-full flex flex-col items-center gap-[16px] mb-[14px]">
+                  <Image
+                    src="/images/check-black.svg"
+                    alt="Nueva tarjeta"
+                    width={66}
+                    height={66}
+                    className="w-[66px] h-[66px]"
+                  />
+                  <Typography type={"heading4"}>
+                    Ya cargamos el dinero en tu cuenta
+                  </Typography>
+                </article>
+              </Card>
+              <Card mode="dark">
+                <article className="w-full flex flex-col gap-[16px] mb-[14px]">
+                  <Typography type="text2">
+                    {spanishTextDate(new Date(transferenceData.dated))}
+                  </Typography>
+
+                  <Typography type="heading4" className="text-primary">
+                    ${transferenceData.amount}
+                  </Typography>
+                  <Typography type="text2">
+                    Para
+                  </Typography>
+
+                  {accountData && (
+                    <>
+                      <Typography type="text2">{accountData?.alias}</Typography>
+                      <Typography type="text2">{accountData?.cvu}</Typography>
+                    </>
+                  )}
+                </article>
+              </Card>
+            </>
+          )}
+        </>
+      )}
+    </>
   );
 };
 
