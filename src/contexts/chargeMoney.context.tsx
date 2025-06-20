@@ -2,6 +2,8 @@ import { Card as CardType } from "@/types/card.types";
 import React, { PropsWithChildren, useContext } from "react";
 
 type ChargeMoneyContextValue = PropsWithChildren & {
+  amount: number;
+  setAmount: (amount: number) => void;
   cards: CardType[];
   step: number;
   goToNextStep: () => void;
@@ -14,13 +16,17 @@ const ChargeMoneyContext = React.createContext<ChargeMoneyContextValue | null>(
 
 const ChargeMoneyContextProvider = ({
   children,
+  amount,
+  setAmount,
   cards,
   step,
   goToNextStep,
   selectedCard,
 }: ChargeMoneyContextValue) => {
   return (
-    <ChargeMoneyContext.Provider value={{ cards, step, goToNextStep, selectedCard }}>
+    <ChargeMoneyContext.Provider
+      value={{ amount, setAmount, cards, step, goToNextStep, selectedCard }}
+    >
       {children}
     </ChargeMoneyContext.Provider>
   );
