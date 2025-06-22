@@ -10,8 +10,8 @@ import TextInput from "@/components/common/TextInput";
 import Typography from "@/components/common/Typography";
 import PATHS from "@/config/routing/paths";
 import {
-    PaySelectedServiceContextProvider,
-    usePaySelectedServiceContext,
+  PaySelectedServiceContextProvider,
+  usePaySelectedServiceContext,
 } from "@/contexts/paySelectedService.context";
 import useNavigation from "@/hooks/useNavigation";
 import { Card as CardType } from "@/types/card.types";
@@ -25,6 +25,18 @@ type PaySelectedServiceViewProps = {
   service: Service;
   cards: CardType[];
 };
+
+const VALID_ACCOUNT_NUMBERS = {
+  success: 123456,
+  fail: 555555,
+};
+
+function isAccountNumberValid(accountNumber: number) {
+  return (
+    accountNumber === VALID_ACCOUNT_NUMBERS.success ||
+    accountNumber === VALID_ACCOUNT_NUMBERS.fail
+  );
+}
 
 const PaySelectedServiceView = ({
   service,
@@ -84,7 +96,7 @@ const PaySelectedServiceStep1 = () => {
   const { register, handleSubmit, getValues } = methods;
 
   useEffect(() => {
-    if (accountNumber !== null && accountNumber === 123456) {
+    if (accountNumber !== null && isAccountNumberValid(accountNumber)) {
       goToNextStep();
     }
   }, [accountNumber, goToNextStep]);
@@ -108,7 +120,7 @@ const PaySelectedServiceStep1 = () => {
   };
 
   if (
-    (accountNumber !== null && accountNumber !== 123456) ||
+    (accountNumber !== null && !isAccountNumberValid(accountNumber)) ||
     !service?.invoice_value
   ) {
     return (
@@ -240,11 +252,48 @@ const PaySelectedServiceStep2 = ({
 };
 
 const PaySelectedServiceStep3 = () => {
-  const { service, cards, selectedCard } = usePaySelectedServiceContext();
+  const { accountNumber, service, cards, selectedCard } =
+    usePaySelectedServiceContext();
 
   const selectedCardData = cards.find((card) => card.id === selectedCard);
-  const selectedCardLastFourNumbers = String(selectedCardData?.cod).slice(-4);
-  const cardProvider = determineCardProvider(String(selectedCardData?.cod));
+  const selectedCardLastFourNumbers = String(selectedCardData?.number_id).slice(-4);
+  const cardProvider = determineCardProvider(String(selectedCardData?.number_id));
+
+  console.log({selectedCardData})
+  if (accountNumber === VALID_ACCOUNT_NUMBERS.fail) {
+    return (
+      <section className="flex flex-col gap-[16px]">
+        <Card mode="dark">
+          <article className="w-full flex flex-col items-center gap-[16px] mb-[14px]">
+            <Image
+              src="/images/red-cross.svg"
+              alt="Hubo un problema con tu pago"
+              width={66}
+              height={66}
+              className="w-[66px] h-[66px]"
+            />
+            <Typography type={"heading4"}>
+              Hubo un problema con tu pago
+            </Typography>
+
+            <div className="w-full border-b-1 border-y-gray-400" />
+
+            <Typography type={"text1"}>
+              Puede deberse a fondos insuficientes Comunicate con la entidad
+              emisora de la tarjeta
+            </Typography>
+          </article>
+        </Card>
+        <div className="flex flex-row justify-end">
+          <Link href={PATHS.PAY_SERVICES}>
+            <Button mode="primary" className="w-[233px]">
+              Volver a intentarlo
+            </Button>
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col gap-[16px]">
