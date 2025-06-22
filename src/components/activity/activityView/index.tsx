@@ -16,13 +16,21 @@ type ActivityViewProps = {
 
 const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedTransactionType, setSelectedTransactionType] = useState<
+    string
+  >("all");
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   const methods = useForm<{ search: string }>({});
 
-  const handleFilterChange = (value: string | null) => {
+  const handleFilterChange = (value: {
+    date: string | null;
+    type: string;
+  }) => {
     setShowFilters(false);
-    setSelectedFilter(value);
+    setSelectedFilter(value.date);
+    setSelectedTransactionType(value.type);
+    console.log({ value });
   };
 
   const { watch, register } = methods;
@@ -44,6 +52,7 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
           {showFilters && (
             <Filters
               selectedFilter={selectedFilter}
+              selectedTrsansactionType={selectedTransactionType}
               onFilterChange={handleFilterChange}
             />
           )}
@@ -57,6 +66,7 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
             transactions={transactions || []}
             limit={limit}
             filter={selectedFilter}
+            filterType={selectedTransactionType}
             paginate
             search={searchValue}
           />
@@ -69,20 +79,34 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
 const Filters = ({
   selectedFilter,
   onFilterChange,
+  selectedTrsansactionType,
 }: {
   selectedFilter: string | null;
-  onFilterChange: (value: string | null) => void;
+  selectedTrsansactionType: string;
+  onFilterChange: (value: { date: string | null; type: string }) => void;
 }) => {
   const [internalFilter, setInternalFilter] = useState<string | null>(
     selectedFilter
   );
+  const [internalTransactionType, setInternalTransactionType] = useState<
+    string 
+  >(selectedTrsansactionType || "all");
+
+  const onSelectTransactionType = (value: string) => {
+    setInternalTransactionType(value);
+  };
 
   const onSelectFilter = (value: string | null) => {
     setInternalFilter(value);
   };
 
   const handleApplyFilter = () => {
-    onFilterChange(internalFilter);
+    onFilterChange({ date: internalFilter, type: internalTransactionType });
+  };
+
+  const handleResetFilters = () => {
+    onSelectFilter(null);
+    onSelectTransactionType("all");
   };
 
   return (
@@ -91,31 +115,47 @@ const Filters = ({
         <Typography type={"heading6"} className="text-black">
           Período
         </Typography>
-        <p
-          onClick={() => onSelectFilter(null)}
-          className="text-right cursor-pointer"
-        >
+        <p onClick={handleResetFilters} className="text-right cursor-pointer">
           Borrar filtros
         </p>
       </header>
 
       <section className="grid grid-cols-[1fr_min-content] px-[16px] py-[8px] gap-[8px]">
-        {filters.map((filter) => (
-          <div
-            onClick={() => onSelectFilter(filter.value)}
-            key={`filter-${filter.value}`}
-            className="contents  cursor-pointer"
-          >
-            <div>{filter.name}</div>
-            <div>
-              <input
-                readOnly
-                checked={filter.value === internalFilter}
-                type="radio"
-              />
+        <>
+          {transaction_type_filtes.map((filter) => (
+            <div
+              onClick={() => onSelectTransactionType(filter.value)}
+              key={`filter-${filter.value}`}
+              className="contents  cursor-pointer"
+            >
+              <div>{filter.name}</div>
+              <div>
+                <input
+                  readOnly
+                  checked={filter.value === internalTransactionType}
+                  type="radio"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+          <div className="col-span-2 border-b-1 border-b-black" />
+          {filters.map((filter) => (
+            <div
+              onClick={() => onSelectFilter(filter.value)}
+              key={`filter-${filter.value}`}
+              className="contents  cursor-pointer"
+            >
+              <div>{filter.name}</div>
+              <div>
+                <input
+                  readOnly
+                  checked={filter.value === internalFilter}
+                  type="radio"
+                />
+              </div>
+            </div>
+          ))}
+        </>
         <Button
           onClick={handleApplyFilter}
           size="small"
@@ -127,6 +167,21 @@ const Filters = ({
     </div>
   );
 };
+
+const transaction_type_filtes = [
+  {
+    name: "Todos",
+    value: "all",
+  },
+  {
+    name: "Ingresos",
+    value: "Deposit",
+  },
+  {
+    name: "Egresos",
+    value: "Transaction",
+  },
+];
 
 const filters = [
   {

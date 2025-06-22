@@ -6,6 +6,7 @@ import TransactionLogEntry from "../TransactionLogEntry";
 type TransactionLogsProps = {
   transactions: Transaction[];
   filter: string | null;
+  filterType: string | null;
   limit?: number;
   paginate?: boolean;
   search: string;
@@ -15,13 +16,16 @@ const TransactionLogs = ({
   transactions,
   limit,
   filter,
+  filterType,
   paginate,
   search = "",
 }: TransactionLogsProps) => {
   const [page, setPage] = useState(1);
 
   const filteredTransactions = filterTransactionsByDates(
-    transactions.filter((transaction) =>
+    transactions
+    .filter((transaction) => filterType === "all" || transaction.type === filterType)
+    .filter((transaction) =>
       transaction.description.toLowerCase().includes(search.toLowerCase())
     ),
     filter
