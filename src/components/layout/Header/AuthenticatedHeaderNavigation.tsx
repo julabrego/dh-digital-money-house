@@ -15,7 +15,7 @@ const AuthenticatedHeaderNavigation = () => {
         <Link href={PATHS.HOME}>{initials}</Link>
       </div>
       <h2 className="hidden md:block font-bold">
-        Hola, <Link href={PATHS.PROFILE}>{userNameData.fullName}</Link>
+        Hola, <Link href={PATHS.HOME}>{userNameData.fullName}</Link>
       </h2>
       <Image
         onClick={toggleMenuOpen}

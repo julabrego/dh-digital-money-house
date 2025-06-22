@@ -58,7 +58,7 @@ const setAuthenticationHeaders = (
   accountId: string
 ) => {
   const requestHeaders = new Headers(request.headers);
-  
+
   requestHeaders.set("x-access-token", accessToken);
   requestHeaders.set("x-user-id", userId);
   requestHeaders.set("x-account-id", accountId);
@@ -71,5 +71,15 @@ const setAuthenticationHeaders = (
 };
 
 export const config = {
-  matcher: ["/", "/home:path*", "/profile", "/login", "/register", "/cards/:path*", "/activity/:path*", "/charge-money/:path*"],
+  matcher: [
+    "/",
+    "/home:path*",
+    "/profile",
+    "/login",
+    "/register",
+    "/cards/:path*",
+    "/activity/:path*",
+    "/charge-money/:path*",
+    "/pay-services/:path*",
+  ],
 };

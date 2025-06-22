@@ -30,7 +30,6 @@ const ActivityView = ({ transactions, limit }: ActivityViewProps) => {
     setShowFilters(false);
     setSelectedFilter(value.date);
     setSelectedTransactionType(value.type);
-    console.log({ value });
   };
 
   const { watch, register } = methods;

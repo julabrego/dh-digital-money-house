@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { MenuItemProps } from "./types";
 import { useNavigationMenuContext } from "@/contexts/navigationMenu.context";
+import useNavigation from "@/hooks/useNavigation";
 
 const MenuItem = ({
   label,
@@ -10,6 +11,7 @@ const MenuItem = ({
   onClick,
 }: MenuItemProps) => {
   const { isMenuOpen, toggleMenuOpen } = useNavigationMenuContext();
+  const { pathName } = useNavigation();
 
   const handleClick = () => {
     if (onClick) onClick();
@@ -24,7 +26,7 @@ const MenuItem = ({
         } cursor-pointer`}
       >
         <a
-          className={`font-bold cursor-pointer ${
+          className={`cursor-pointer ${
             isSemitransparent ? "opacity-50" : ""
           }`}
           onClick={handleClick}
@@ -43,9 +45,9 @@ const MenuItem = ({
     >
       <Link
         href={path}
-        className={`font-bold cursor-pointer ${
+        className={`cursor-pointer ${
           isSemitransparent ? "opacity-50" : ""
-        }`}
+        } ${pathName.startsWith(path) ? "font-bold" : ""}`}
         onClick={handleClick}
       >
         {label}
