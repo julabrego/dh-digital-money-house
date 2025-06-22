@@ -70,7 +70,7 @@ export const CardDrawing = () => {
   );
 };
 
-function determineCardProvider(numberId: string) {
+export function determineCardProvider(numberId: string) {
   if (
     numberId.startsWith("51") ||
     numberId.startsWith("52") ||

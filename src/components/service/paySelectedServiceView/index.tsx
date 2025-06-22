@@ -1,5 +1,8 @@
 "use client";
+import { spanishTextDate } from "@/app/utils/date";
 import { formatArgentinePesos } from "@/app/utils/number-utils";
+import { capitalizeFirstLetter } from "@/app/utils/string-utils";
+import { determineCardProvider } from "@/components/cardsPage/CardDrawing";
 import CardSelector from "@/components/carge-money/cardSelector";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
@@ -47,6 +50,11 @@ const PaySelectedServiceView = ({
         <PaySelectedServiceStep2 handleSelectCard={handleSelectCard} />
       );
       break;
+    case 3:
+      stepComponent = <PaySelectedServiceStep3 />;
+      break;
+    default:
+      stepComponent = null;
   }
 
   return (
@@ -225,6 +233,65 @@ const PaySelectedServiceStep2 = ({
           onClick={goToNextStep}
         >
           Continuar
+        </Button>
+      </div>
+    </section>
+  );
+};
+
+const PaySelectedServiceStep3 = () => {
+  const { service, cards, selectedCard } = usePaySelectedServiceContext();
+
+  const selectedCardData = cards.find((card) => card.id === selectedCard);
+  const selectedCardLastFourNumbers = String(selectedCardData?.cod).slice(-4);
+  const cardProvider = determineCardProvider(String(selectedCardData?.cod));
+
+  return (
+    <section className="flex flex-col gap-[16px]">
+      <Card mode="green">
+        <article className="w-full flex flex-col items-center gap-[16px] mb-[14px]">
+          <Image
+            src="/images/check-black.svg"
+            alt="Ya realizaste tu pago"
+            width={66}
+            height={66}
+            className="w-[66px] h-[66px]"
+          />
+          <Typography type={"heading4"}>Ya realizaste tu pago</Typography>
+        </article>
+      </Card>
+      <Card mode="dark">
+        <article className="w-full flex flex-col gap-[16px] mb-[14px]">
+          <Typography type="text2">{spanishTextDate(new Date())}</Typography>
+
+          <Typography type="heading4" className="text-primary">
+            ${service?.invoice_value}
+          </Typography>
+          <Typography type="text2">Para</Typography>
+          <Typography type="heading4" className="text-primary">
+            {service?.name}
+          </Typography>
+
+          <Typography type="text2">Tarjeta</Typography>
+          <Typography type="text2">
+            {capitalizeFirstLetter(cardProvider || "")} ************
+            {selectedCardLastFourNumbers}
+          </Typography>
+        </article>
+      </Card>
+      <div className="flex flex-row justify-end gap-[16px]">
+        <Link href={PATHS.HOME}>
+          <Button mode="tertiary" className="w-[233px]">
+            Ir a inicio
+          </Button>
+        </Link>
+        <Button
+          mode="primary"
+          type="submit"
+          onClick={() => console.log("😅😅😅")}
+          className="w-[260px]"
+        >
+          Descargar comprobante
         </Button>
       </div>
     </section>
