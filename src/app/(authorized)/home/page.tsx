@@ -29,12 +29,16 @@ const HomePage = async () => {
       <section className="summary">
         <Card mode="dark">
           <div className="w-full flex flex-row gap-[16px] justify-end mb-[14px]">
-            <p className="text-[12px] hover:underline cursor-pointer">
-              Ver tarjetas
-            </p>
-            <p className="text-[12px] hover:underline cursor-pointer">
-              Ver CVU
-            </p>
+            <Link href={PATHS.CARDS}>
+              <p className="text-[12px] hover:underline cursor-pointer">
+                Ver tarjetas
+              </p>
+            </Link>
+            <Link href={PATHS.PROFILE}>
+              <p className="text-[12px] hover:underline cursor-pointer">
+                Ver CVU
+              </p>
+            </Link>
           </div>
           <p className="text-[16px] mb-[8px]">Dinero disponible</p>
           <div className="px-[16px] py-[8px] border border-primary rounded-[100px] w-fit min-w-[100px] text-center">
