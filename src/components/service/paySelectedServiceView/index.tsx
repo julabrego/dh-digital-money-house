@@ -1,33 +1,51 @@
 "use client";
+import { formatArgentinePesos } from "@/app/utils/number-utils";
+import CardSelector from "@/components/carge-money/cardSelector";
 import Button from "@/components/common/Button";
 import Card from "@/components/common/Card";
 import TextInput from "@/components/common/TextInput";
 import Typography from "@/components/common/Typography";
+import PATHS from "@/config/routing/paths";
 import {
-  PaySelectedServiceContextProvider,
-  usePaySelectedServiceContext,
+    PaySelectedServiceContextProvider,
+    usePaySelectedServiceContext,
 } from "@/contexts/paySelectedService.context";
+import useNavigation from "@/hooks/useNavigation";
+import { Card as CardType } from "@/types/card.types";
 import { Service } from "@/types/service.types";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 type PaySelectedServiceViewProps = {
   service: Service;
+  cards: CardType[];
 };
 
-const PaySelectedServiceView = ({ service }: PaySelectedServiceViewProps) => {
+const PaySelectedServiceView = ({
+  service,
+  cards,
+}: PaySelectedServiceViewProps) => {
   const [step, setStep] = useState(1);
   const [accountNumber, setAccountNumber] = useState<number | null>(null);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const goToNextStep = () => setStep(step + 1);
   const goToPrevStep = () => setStep(step - 1);
+
+  const handleSelectCard = (id: number) => setSelectedCard(id);
 
   let stepComponent = null;
 
   switch (step) {
     case 1:
       stepComponent = <PaySelectedServiceStep1 />;
+      break;
+    case 2:
+      stepComponent = (
+        <PaySelectedServiceStep2 handleSelectCard={handleSelectCard} />
+      );
       break;
   }
 
@@ -36,21 +54,23 @@ const PaySelectedServiceView = ({ service }: PaySelectedServiceViewProps) => {
       service={service}
       accountNumber={accountNumber}
       setAccountNumber={setAccountNumber}
+      cards={cards}
+      selectedCard={selectedCard}
       step={step}
       goToNextStep={goToNextStep}
       goToPrevStep={goToPrevStep}
     >
-      {stepComponent};
+      {stepComponent}
     </PaySelectedServiceContextProvider>
   );
 };
 
 const PaySelectedServiceStep1 = () => {
   const [error, setError] = useState<string | null>(null);
-
+  const { goTo } = useNavigation();
   const methods = useForm<{ accountNumber: string }>({});
 
-  const { goToNextStep, setAccountNumber, accountNumber } =
+  const { service, goToNextStep, setAccountNumber, accountNumber } =
     usePaySelectedServiceContext();
 
   const { register, handleSubmit, getValues } = methods;
@@ -72,10 +92,17 @@ const PaySelectedServiceStep1 = () => {
   };
 
   const handleReset = () => {
-    setAccountNumber(null);
+    if (!service?.invoice_value) {
+      goTo(PATHS.PAY_SERVICES);
+    } else {
+      setAccountNumber(null);
+    }
   };
 
-  if (accountNumber !== null && accountNumber !== 123456) {
+  if (
+    (accountNumber !== null && accountNumber !== 123456) ||
+    !service?.invoice_value
+  ) {
     return (
       <section className="flex flex-col gap-[16px]">
         <Card mode="dark">
@@ -144,6 +171,63 @@ const PaySelectedServiceStep1 = () => {
         </form>
       </FormProvider>
     </Card>
+  );
+};
+
+const PaySelectedServiceStep2 = ({
+  handleSelectCard,
+}: {
+  handleSelectCard: (id: number) => void;
+}) => {
+  const { service, cards, selectedCard, goToNextStep } =
+    usePaySelectedServiceContext();
+
+  return (
+    <section className="flex flex-col gap-[16px]">
+      <Card mode="dark">
+        <section className="flex flex-col gap-4">
+          <Typography type={"heading3"} className="text-primary">
+            {service?.name}
+          </Typography>
+
+          <div className="w-full border-b-1 border-y-gray-400" />
+
+          <div className="flex flex-row justify-between">
+            <Typography type={"heading3"}>Total a pagar</Typography>
+            <Typography type={"heading3"}>
+              {formatArgentinePesos(service?.invoice_value || 0)}
+            </Typography>
+          </div>
+        </section>
+      </Card>
+      <Card mode="white">
+        <CardSelector
+          cards={cards}
+          selectedCard={selectedCard}
+          onSelectCard={handleSelectCard}
+        />
+        {cards.length < 10 && (
+          <Link href={PATHS.CARDS_NEW}>
+            <div className="flex w-full flex-row gap-[16px] items-center pt-[16px]">
+              <Typography type={"text2"} className="text-black">
+                + Agregar medio de pago
+              </Typography>
+            </div>
+          </Link>
+        )}
+      </Card>
+      <div className="flex flex-row justify-end">
+        <Button
+          mode="primary"
+          type="submit"
+          className="w-[233px]"
+          disabled={!selectedCard}
+          onClick={goToNextStep}
+        >
+          Continuar
+        </Button>
+      </div>
+    </section>
   );
 };
 
