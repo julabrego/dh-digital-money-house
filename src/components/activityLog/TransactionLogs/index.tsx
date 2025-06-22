@@ -6,7 +6,7 @@ import TransactionLogEntry from "../TransactionLogEntry";
 type TransactionLogsProps = {
   transactions: Transaction[];
   filter: string | null;
-  filterType: string | null;
+  filterType?: string;
   limit?: number;
   paginate?: boolean;
   search: string;
@@ -16,7 +16,7 @@ const TransactionLogs = ({
   transactions,
   limit,
   filter,
-  filterType,
+  filterType = "all",
   paginate,
   search = "",
 }: TransactionLogsProps) => {
