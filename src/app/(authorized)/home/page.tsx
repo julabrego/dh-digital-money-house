@@ -1,16 +1,14 @@
 import { formatArgentinePesos } from "@/app/utils/number-utils";
-import TransactionLogs from "@/components/activityLog/TransactionLogs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Button from "@/components/common/Button";
 import CallToActionRow from "@/components/common/CallToActionRow";
 import Card from "@/components/common/Card";
-import CardFooter from "@/components/common/CardFooter";
-import CardHeader from "@/components/common/CardHeader";
-import SearchInput from "@/components/SearchInput";
+import HomeActivityLog from "@/components/home/activityLog";
 import PATHS from "@/config/routing/paths";
 import authAPI from "@/services/auth/auth.api";
 import transactionApi from "@/services/transaction/transaction.api";
 import { headers } from "next/headers";
+import Link from "next/link";
 
 const HomePage = async () => {
   const token = (await headers()).get("x-access-token") ?? null;
@@ -50,28 +48,20 @@ const HomePage = async () => {
 
       <section className="call-to-actions">
         <CallToActionRow>
-          <Button mode="primary" size="large">
-            Ingresar dinero
-          </Button>
-          <Button mode="primary" size="large">
-            Pago de servicios
-          </Button>
+          <Link href={PATHS.CHARGE_MONEY} className="w-full">
+            <Button mode="primary" size="large">
+              Ingresar dinero
+            </Button>
+          </Link>
+          <Link href={PATHS.PAY_SERVICES} className="w-full">
+            <Button mode="primary" size="large">
+              Pago de servicios
+            </Button>
+          </Link>
         </CallToActionRow>
       </section>
 
-      <section className="activity_log flex flex-col gap-[16px]">
-        <SearchInput />
-
-        <Card>
-          <CardHeader>Tu actividad</CardHeader>
-
-          <TransactionLogs transactions={transactions || []} limit={10} filter={null} search={""} />
-
-          <CardFooter footerClickPath={PATHS.ACTIVITY}>
-            Ver toda tu actividad
-          </CardFooter>
-        </Card>
-      </section>
+      <HomeActivityLog transactions={transactions || []} />
     </main>
   );
 };
